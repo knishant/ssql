@@ -1,0 +1,62 @@
+apply plugin: 'java'
+group = 'org.nkumar'
+archivesBaseName = 'ssql'
+def major = 0
+def minor = 1
+def prodReady = false
+
+version = "$major.$minor${prodReady ? '-RELEASE' : '-SNAPSHOT'}"
+
+targetCompatibility = 1.6
+sourceCompatibility = 1.6
+
+repositories {
+    mavenCentral()
+}
+
+
+wrapper.gradleVersion = '2.3'
+
+configurations {
+    lib_javacc
+}
+
+dependencies {
+    testCompile('junit:junit:4.11')
+    lib_javacc('net.java.dev.javacc:javacc:6.1.2')
+}
+
+task copyJavaccLib(type: Copy) {
+    into "$buildDir/javacchome/bin/lib"
+    from configurations.lib_javacc
+    rename 'javacc(.*).jar', 'javacc.jar'
+}
+
+task javacc(dependsOn: 'copyJavaccLib') << {
+    new File("$buildDir/javacc-gen/main/org/nkumar/ssql/parser/ddl").mkdirs();
+    project.ant."javacc"(
+            javaccHome: "$buildDir/javacchome",
+            target: "$projectDir/src/main/resources/ddl.jj",
+            outputDirectory: "$buildDir/javacc-gen/main/org/nkumar/ssql/parser/ddl")
+}
+
+compileJava.dependsOn javacc
+
+sourceSets {
+    main {
+        java {
+            srcDirs('src/main/java', "$buildDir/javacc-gen/main")
+        }
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
