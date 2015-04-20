@@ -1,0 +1,827 @@
+options {
+  IGNORE_CASE = true;
+  STATIC = false;
+}
+
+PARSER_BEGIN(SqlParser)
+
+package org.nkumar.ssql.parser;
+
+import java.io.*;
+import java.util.*;
+import org.nkumar.ssql.model.*;
+import java.sql.Types;
+
+public class SqlParser
+{
+    public static List parseDdls(String str) throws Exception
+    {
+        SqlParser parser = new SqlParser(new ByteArrayInputStream(str.getBytes("UTF-8")));
+        return parser.CompilationUnit();
+    }
+
+    private static Comment[] getComments(Token t)
+    {
+        if (t.specialToken == null)
+        {
+            return null;
+        }
+        List list = new ArrayList();
+        Token spt = t.specialToken;
+        while (spt.specialToken != null)
+        {
+            spt = spt.specialToken;
+        }
+        // The above line walks back the special token chain until it
+        // reaches the first special token after the previous regular token.
+        // The following loop now walks the special token chain in the forward direction
+        while (spt != null)
+        {
+            int kind = 0;
+            if (spt.kind == SqlParserConstants.LINE_COMMENT)
+            {
+                kind = 1;
+            }
+            else if (spt.kind == SqlParserConstants.MULTI_LINE_COMMENT)
+            {
+                kind = 2;
+            }
+            else
+            {
+                continue;
+            }
+            list.add(new Comment(spt.image, kind));
+            spt = spt.next;
+        }
+        return (Comment[]) list.toArray(new Comment[0]);
+    }
+}
+
+PARSER_END(SqlParser)
+
+
+SKIP:
+{
+    " "
+|   "\t"
+|   "\r"
+|   "\n"
+}
+
+
+TOKEN:	/* Key words */
+{
+    <K_CREATE: "create">
+|   <K_TABLE: "table">
+|   <K_INDEX: "index">
+|   <K_SEQUENCE: "sequence">
+|   <K_CONSTRAINT: "constraint">
+|   <K_UNIQUE: "unique">
+|   <K_PRIMARY: "primary">
+|   <K_FOREIGN: "foreign">
+|   <K_KEY: "key">
+|   <K_REFERENCES: "references">
+|   <K_NOT: "not">
+|   <K_NULL: "null">
+|   <K_ADD: "add">
+|   <K_DROP: "drop">
+|   <K_COLUMN: "column">
+|   <K_ALTER: "alter">
+|   <K_DEFAULT: "default">
+|   <K_ASC: "asc">
+|   <K_DESC: "desc">
+|   <K_ON: "on">
+|   <K_DELETE: "delete">
+|   <K_CASCADE: "cascade">
+|   <K_CONSTRAINTS: "constraints">
+|   <K_START: "start">
+|   <K_WITH: "with">
+|   <K_MAXVALUE: "maxvalue">
+|   <K_MINVALUE: "minvalue">
+|   <K_NOCYCLE: "nocycle">
+|   <K_NOCACHE: "nocache">
+|   <K_NOORDER: "noorder">
+}
+
+TOKEN:  /* data types */
+{
+    <T_CHAR: "char">
+|   <T_VARCHAR: "varchar">
+|   <T_VARYING: "varying">
+|   <T_CLOB: "clob">
+|   <T_NCHAR: "nchar">
+|   <T_NVARCHAR: "nvarchar">
+|   <T_NCLOB: "nclob">
+|   <T_BLOB: "blob">
+|   <T_BIT: "bit">
+|   <T_NUMERIC: "numeric">
+|   <T_INT: "int">
+|   <T_SMALLINT: "smallint">
+|   <T_BIGINT: "bigint">
+|   <T_FLOAT: "float">
+|   <T_REAL: "real">
+|   <T_DOUBLE: "double">
+|   <T_PRECISION: "precision">
+|   <T_BOOLEAN: "boolean">
+|   <T_DATE: "date">
+|   <T_TIME: "time">
+|   <T_TIMESTAMP: "timestamp">
+}
+
+TOKEN: /* functions */
+{
+    <F_CURRENT_DATE: "current_date">
+|   <F_CURRENT_TIME: "current_time">
+|   <F_CURRENT_TIMESTAMP: "current_timestamp">
+}
+
+TOKEN : /* Numeric Constants */
+{
+	< S_NUMBER: <FLOAT>
+	    | <FLOAT> ( ["e","E"] ([ "-","+"])? <FLOAT> )?
+    	>
+  | 	< #FLOAT: <INTEGER>
+	    | <INTEGER> ( "." <INTEGER> )?
+	    | "." <INTEGER>
+    	>
+  | 	< #INTEGER: ( <DIGIT> )+ >
+  | 	< #DIGIT: ["0" - "9"] >
+}
+
+TOKEN :
+{
+    <PLACE_HOLDER: "/*{L{" (~["}"])* "}}*/">
+}
+
+SPECIAL_TOKEN:
+{
+   <LINE_COMMENT: "--"(~["\r","\n"])*>
+|  <MULTI_LINE_COMMENT: "/*" (~["*"])* "*" ("*" | (~["*","/"] (~["*"])* "*"))* "/">
+}
+
+/*TODO:also parse quoted identifier*/
+TOKEN:
+{
+    < S_IDENTIFIER: (<LETTER>)+ (<DIGIT> | <LETTER> |<SPECIAL_CHARS>)* >
+  | < #LETTER: ["a"-"z", "A"-"Z"] >
+  | < #SPECIAL_CHARS: "_">
+  | < S_CHAR_LITERAL: "'" (~["'"])* "'" ("'" (~["'"])* "'")*>
+/*  | < S_QUOTED_IDENTIFIER: "\"" (~["\n","\r","\""])* "\"" > */
+}
+
+TOKEN :
+{
+    < LPAREN: "(" >
+|   < RPAREN: ")" >
+|   < COMMA: "," >
+|   < SEMICOLON: ";" >
+}
+
+/*Terminal*/
+List CompilationUnit() :
+{
+    List list = new ArrayList();
+    DdlStatement ddl;
+}
+{
+	(
+	    ddl = DdlStatement()    {list.add(ddl);}
+	    <SEMICOLON>
+    )+
+    {return list;}
+}
+
+DdlStatement DdlStatement() :
+{
+    DdlStatement ddl;
+}
+{
+    (
+        ddl = CreateEntityStatement()
+    |
+        ddl = DropEntityStatement()
+    |
+        ddl = AlterTableStatement()
+    )
+    {return ddl;}
+}
+
+CreateEntityStatement CreateEntityStatement() :
+{
+    CreateEntityStatement stmt;
+    Comment[] comments;
+    Token t;
+    Token t1 = null;
+    Token t2 = null;
+}
+{
+    t=<K_CREATE>                    {comments = getComments(t);}
+    [t1=<PLACE_HOLDER>]
+    (
+        stmt = CreateTableStatement()
+        |
+        stmt = CreateIndexStatement()
+        |
+        stmt = CreateSequenceStatement()
+    )
+    [t2=<PLACE_HOLDER>]
+    {
+        if (t1 != null) stmt.setOpeningPlaceHolder(PlaceHolder.createPlaceHolder(t1.image));
+        if (t2 != null) stmt.setClosingPlaceHolder(PlaceHolder.createPlaceHolder(t2.image));
+        stmt.setComments(comments);
+        return stmt;
+    }
+}
+
+CreateTableStatement CreateTableStatement() :
+{
+    Token t;
+    CreateTableStatement table;
+}
+{
+	<K_TABLE>
+	t = <S_IDENTIFIER>                  {table = new CreateTableStatement(t.image);}
+	<LPAREN>
+		TableElement(table)
+		(<COMMA> TableElement(table))*
+	<RPAREN>
+	{return table;}
+}
+
+void TableElement(CreateTableStatement table) :
+{
+    Column col;
+    TableConstraint tc;
+}
+{
+    (
+        LOOKAHEAD(2)
+	    col = ColumnDefinition()            {table.addColumn(col);}
+    |
+        tc = TableConstraintDefinition()    {table.addTableConstraint(tc);}
+    )
+}
+
+Column ColumnDefinition() :
+{
+    Column col;
+    Token t;
+    Value val = null;
+    Token t2 = null;
+}
+{
+	t=<S_IDENTIFIER>                    {col = new Column(t.image); col.setComments(getComments(t));}
+	DataType(col)
+    [t2=<PLACE_HOLDER>                  {col.setTypePlaceHolder(PlaceHolder.createPlaceHolder(t2.image));}]
+    /* TODO order of DEFAULT and NOT NULL should not matter */
+    [<K_DEFAULT> val = ConstantValue()       {col.setDefaultValue(val);} ]
+
+    [t2=<K_NOT> <K_NULL>                {col.setNotNull(true);} ]
+
+	{return col;}
+}
+
+/*********
+Data Types
+*********/
+
+void DataType(Column col) :
+{
+    PredefinedType type;
+}
+{
+	type=PredefinedType()   {col.setType(type);}
+}
+
+PredefinedType PredefinedType() :
+{
+    Token t;
+    PredefinedType type;
+    long len;
+    PrecisionScaleBean psb;
+}
+{
+    (
+        (
+	        t=<T_CHAR> {type = new PredefinedType(Types.CHAR);type.setLength(1);}
+	        [ len=LengthSpecification() {type.setLength(len);} ]
+	    )
+	|
+	    (
+	        <T_VARCHAR>     {type = new PredefinedType(Types.VARCHAR);}
+	        len=LengthSpecification() {type.setLength(len);}
+	    )
+	|
+	    (
+	        t=<T_CLOB>    {type = new PredefinedType(Types.CLOB);}
+        )
+	|
+	    (
+	        t=<T_NCHAR>   {type = new PredefinedType(Types.NCHAR); type.setLength(1);}
+	        [ len=LengthSpecification() {type.setLength(len);} ]
+	    )
+	|
+	    (
+	        <T_NVARCHAR>     {type = new PredefinedType(Types.NVARCHAR);}
+	        len=LengthSpecification() {type.setLength(len);}
+	    )
+	|
+	    (
+	        t=<T_NCLOB>   {type = new PredefinedType(Types.NCLOB);}
+	    )
+	|
+	    (
+	        t=<T_BLOB>    {type = new PredefinedType(Types.BLOB);}
+	    )
+	|
+	    (
+	        t=<T_BIT>     {type = new PredefinedType(Types.BIT);}
+	        [ <T_VARYING> {type = new PredefinedType(Types.VARBINARY);} ]
+	        [ len=LengthSpecification()
+	            {if (type.getType() == Types.BIT)
+	                type = new PredefinedType(Types.BINARY);
+                type.setLength(len);}
+            ]
+        )
+	|
+	    (
+	        t=<T_NUMERIC> {type = new PredefinedType(Types.NUMERIC);type.setPrecisionScale(new PrecisionScaleBean());}
+	        [ psb=PrecisionScaleSpecification() {type.setPrecisionScale(psb);}]
+        )
+	|
+	    (
+	        t=<T_INT>     {type = new PredefinedType(Types.INTEGER);}
+	    )
+	|
+	    (
+	        t=<T_SMALLINT>  {type = new PredefinedType(Types.SMALLINT);}
+        )
+	|
+	    (
+	        t=<T_BIGINT>  {type = new PredefinedType(Types.BIGINT);}
+        )
+	|
+	    (
+	        t=<T_FLOAT>   {type = new PredefinedType(Types.FLOAT);}
+	        /* precision is required here instead of length[ len=LengthSpecification() {type.setLength(len);} ]*/
+	    )
+	|
+	    (
+	        t=<T_REAL>  {type = new PredefinedType(Types.REAL);}
+	    )
+	|
+	    (
+	        <T_DOUBLE> <T_PRECISION> {type = new PredefinedType(Types.DOUBLE);}
+	    )
+	|
+	    (
+	        t=<T_BOOLEAN>   {type = new PredefinedType(Types.BOOLEAN);}
+	    )
+	|
+	    (
+	        t=<T_DATE>      {type = new PredefinedType(Types.DATE);}
+	    )
+	|
+	    (
+	        t=<T_TIME>      {type = new PredefinedType(Types.TIME);}
+	    )
+	|
+	    (
+	        t=<T_TIMESTAMP> {type = new PredefinedType(Types.TIMESTAMP);}
+	    )
+	)
+	{
+	    return type;
+	}
+}
+
+long LengthSpecification() :
+{
+    Token t;
+    long length;
+}
+{
+    <LPAREN>
+    t=<S_NUMBER>    {length = Long.parseLong(t.image);}
+    <RPAREN>
+    {return length;}
+}
+
+PrecisionScaleBean PrecisionScaleSpecification() :
+{
+    Token t;
+    PrecisionScaleBean psb = new PrecisionScaleBean();
+}
+{
+    <LPAREN>
+    t=<S_NUMBER>      {psb.setPrecision(Integer.parseInt(t.image));}
+    <COMMA>
+    t=<S_NUMBER>      {psb.setScale(Integer.parseInt(t.image));}
+    <RPAREN>
+    {return psb;}
+}
+
+/**********
+Constraints
+**********/
+
+TableConstraint TableConstraintDefinition() :
+{
+    String name = null;
+    TableConstraint tc;
+}
+{
+    name = ConstraintNameDefinition()
+    tc = TableConstraint()
+    {
+        tc.setConstraintName(name);
+        return tc;
+    }
+}
+
+String ConstraintNameDefinition() :
+{
+    Token t;
+}
+{
+    t=<S_IDENTIFIER> {return t.image;}
+}
+
+TableConstraint TableConstraint() :
+{
+    TableConstraint tc;
+}
+{
+    (
+        tc = UniqueConstraintDefinition()
+    |   tc = ReferentialConstraintDefition()
+    )
+    {return tc;}
+}
+
+UniqueTableConstraint UniqueConstraintDefinition() :
+{
+    UniqueTableConstraint utc;
+    String type;
+    List colList;
+}
+{
+    type = UniqueSpecification()
+    <LPAREN>
+    colList = ColumnList()
+    <RPAREN>
+    {return new UniqueTableConstraint(type, colList);}
+}
+
+String UniqueSpecification() :
+{
+    Token t;
+    String key;
+}
+{
+    (
+        t=<K_UNIQUE>            {key=t.image;}
+    |
+        t=<K_PRIMARY> <K_KEY>   {key=t.image;}
+    )
+    {return key;}
+}
+
+List ColumnList() :
+{
+    Token t;
+    List list = new ArrayList();
+}
+{
+    t=<S_IDENTIFIER>        {list.add(t.image);}
+    (
+        <COMMA>
+        t=<S_IDENTIFIER>    {list.add(t.image);}
+    )*
+    {return list;}
+}
+
+ForeignKeyTableConstraint ReferentialConstraintDefition() :
+{
+    List colList;
+    References ref;
+}
+{
+    <K_FOREIGN> <K_KEY>
+    <LPAREN>
+        colList = ColumnList()
+    <RPAREN>
+    ref = ReferencesSpecification()
+    {return new ForeignKeyTableConstraint(colList, ref);}
+}
+
+References ReferencesSpecification() :
+{
+    Token t;
+    List colList;
+    Token t2 = null;
+    boolean onDeleteCascade = false;
+}
+{
+    <K_REFERENCES> t=<S_IDENTIFIER>
+    <LPAREN>
+        colList = ColumnList()
+    <RPAREN>
+    [t2=<K_ON> <K_DELETE> <K_CASCADE> ] {if (t2!= null && "on".equalsIgnoreCase(t2.image)) onDeleteCascade = true;}
+    {return new References(t.image, colList, onDeleteCascade);}
+}
+
+Value ConstantValue() :
+{
+    Value value = new Value();
+    Token t;
+    String dateValueFunction;
+}
+{
+    (
+        t=<S_NUMBER>                            {value.setNumberValue(t.image);}
+    |
+        t=<S_CHAR_LITERAL>                      {value.setStringValue(t.image);}
+    |
+        <K_NULL>                                {value.setNullValue(true);}
+    |
+        dateValueFunction=DateValueFunction()   {value.setDateValueFunction(dateValueFunction);}
+    )
+    {return value;}
+}
+
+String DateValueFunction() :
+{
+    Token t;
+}
+{
+    (
+        t=<F_CURRENT_DATE>
+    |
+        t=<F_CURRENT_TIME>
+    |
+        t=<F_CURRENT_TIMESTAMP>
+    )
+    {return t.image;}
+}
+
+/***************
+Alter Statements
+***************/
+
+AlterTableStatement AlterTableStatement() :
+{
+    AlterTableStatement stmt;
+    Token t;
+    Comment[] comments;
+}
+{
+    t = <K_ALTER> <K_TABLE>       {comments = getComments(t);}
+    t = <S_IDENTIFIER>
+    stmt = AlterTableAction(t.image)
+    {stmt.setComments(comments);return stmt;}
+}
+
+AlterTableStatement AlterTableAction(String tableName) :
+{
+    AlterTableStatement stmt;
+    Column col;
+    TableConstraint tc;
+    String columnName;
+    String constraintName;
+}
+{
+    (
+        <K_ADD>
+        (
+            col = AddColumnDefinition()                         {stmt = new AddColumnStatement(tableName, col);}
+        |
+            tc = AddTableConstraintDefinition()                 {stmt = new AddTableConstraintStatement(tableName, tc);}
+        )
+    |
+        <K_DROP>
+        (
+            columnName = DropColumnDefinition()                 {stmt = new DropColumnStatement(tableName, columnName);}
+        |
+            constraintName = DropTableConstraintDefinition()    {stmt = new DropTableConstraintStatement(
+                                                                            tableName, constraintName);}
+        )
+    )
+    {return stmt;}
+}
+
+Column AddColumnDefinition() :
+{
+    Column col;
+}
+{
+    <K_COLUMN>
+    col = ColumnDefinition()        {return col;}
+}
+
+String DropColumnDefinition() :
+{
+    Token t;
+}
+{
+     <K_COLUMN>
+     t = <S_IDENTIFIER>     {return t.image;}
+     /* this might change when we implement the following behaviour*/
+     /*<drop behavior>*/
+}
+
+TableConstraint AddTableConstraintDefinition() :
+{
+    TableConstraint tc;
+}
+{
+    <K_CONSTRAINT>
+    tc = TableConstraintDefinition()    {return tc;}
+}
+
+String DropTableConstraintDefinition() :
+{
+    String name;
+}
+{
+    <K_CONSTRAINT>
+    name = ConstraintNameDefinition()       {return name;}
+    /* this might change when we implement the following behaviour*/
+    /*<drop behavior>*/
+}
+
+/****
+Index
+****/
+
+/*
+create [unique] index <index-name> on <table-name>
+( <column-name> [ASC|DESC], ...)
+*/
+
+CreateIndexStatement CreateIndexStatement() :
+{
+    CreateIndexStatement index;
+    Token t;
+    boolean unique = false;
+    List colList;
+}
+{
+    [<K_UNIQUE>     {unique = true;}]
+    <K_INDEX>
+    t=<S_IDENTIFIER>    {index = new CreateIndexStatement(t.image, unique);}
+    <K_ON>
+    t=<S_IDENTIFIER>    {index.setTableName(t.image);}
+    <LPAREN>
+    colList = ADColumnList()  {index.setColumns(colList);}
+    <RPAREN>
+
+    {return index;}
+}
+
+List ADColumnList() :
+{
+    List list = new ArrayList();
+    ADColumn col;
+}
+{
+    col=ADColumn()          {list.add(col);}
+    (
+        <COMMA>
+        col=ADColumn()      {list.add(col);}
+    )*
+    {return list;}
+}
+
+ADColumn ADColumn() :
+{
+    Token t;
+    ADColumn col;
+}
+{
+    t=<S_IDENTIFIER>        {col = new ADColumn(t.image);}
+    [
+        (
+            t=<K_ASC>       {col.setAscDesc(t.image);}
+        |
+            t=<K_DESC>      {col.setAscDesc(t.image);}
+        )
+    ]
+    {return col;}
+}
+
+/*******
+Sequence
+*******/
+
+CreateSequenceStatement CreateSequenceStatement() :
+{
+    CreateSequenceStatement sequence;
+    Token t;
+}
+{
+    <K_SEQUENCE>
+    t=<S_IDENTIFIER>    {sequence = new CreateSequenceStatement(t.image);}
+    (SequenceOption(sequence)) +
+    {return sequence;}
+}
+
+void SequenceOption(CreateSequenceStatement seq) :
+{
+    Token t;
+    long number;
+}
+{
+    (
+        (
+            <K_START> <K_WITH>
+            number=IntegerLengthSpecification()     {seq.setStartWith(number);}
+	    )
+	|
+	    (
+            <K_MINVALUE>
+            number=IntegerLengthSpecification()     {seq.setMinValue(number);}
+	    )
+	|
+	    (
+            <K_MAXVALUE>
+            t=<S_NUMBER>     {seq.setMaxValue(t.image);}
+	    )
+	|
+	    (
+            <K_NOCYCLE>      {seq.setNoCycle(true);}
+	    )
+	|
+	    (
+            <K_NOCACHE>      {seq.setNoCache(true);}
+	    )
+	|
+	    (
+            <K_NOORDER>      {seq.setNoOrder(true);}
+	    )
+	)
+}
+
+long IntegerLengthSpecification() :
+{
+    Token t;
+    long length;
+}
+{
+    t=<S_NUMBER>    {length = Long.parseLong(t.image);}
+    {return length;}
+}
+
+DropEntityStatement DropEntityStatement() :
+{
+    DropEntityStatement stmt;
+    Token t;
+    Comment[] comments;
+}
+{
+    t=<K_DROP>                  {comments = getComments(t);}
+    (
+        stmt = DropTableStatement()
+        |
+        stmt = DropIndexStatement()
+        |
+        stmt = DropSequenceStatement()
+    )
+    {stmt.setComments(comments); return stmt;}
+}
+
+DropTableStatement DropTableStatement() :
+{
+    Token t;
+    DropTableStatement stmt;
+    Token t2 = null;
+}
+{
+    <K_TABLE>
+    t = <S_IDENTIFIER>  {stmt = new DropTableStatement(t.image);}
+    [t2=<K_CASCADE> <K_CONSTRAINTS> {stmt.setCascadeConstraint(true);} ]
+    {return stmt;}
+}
+
+DropIndexStatement DropIndexStatement() :
+{
+    Token t;
+    DropIndexStatement stmt;
+}
+{
+    <K_INDEX>
+    t = <S_IDENTIFIER>  {stmt = new DropIndexStatement(t.image);}
+    {return stmt;}
+}
+
+
+DropSequenceStatement DropSequenceStatement() :
+{
+    Token t;
+    DropSequenceStatement stmt;
+}
+{
+    <K_SEQUENCE>
+    t = <S_IDENTIFIER>  {stmt = new DropSequenceStatement(t.image);}
+    {return stmt;}
+}

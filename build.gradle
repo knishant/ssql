@@ -33,11 +33,11 @@ task copyJavaccLib(type: Copy) {
 }
 
 task javacc(dependsOn: 'copyJavaccLib') << {
-    new File("$buildDir/javacc-gen/main/org/nkumar/ssql/parser/ddl").mkdirs();
+    new File("$buildDir/javacc-gen/main/org/nkumar/ssql/parser").mkdirs();
     project.ant."javacc"(
             javaccHome: "$buildDir/javacchome",
             target: "$projectDir/src/main/resources/ddl.jj",
-            outputDirectory: "$buildDir/javacc-gen/main/org/nkumar/ssql/parser/ddl")
+            outputDirectory: "$buildDir/javacc-gen/main/org/nkumar/ssql/parser")
 }
 
 compileJava.dependsOn javacc
