@@ -104,7 +104,7 @@ public class TypeNames
             map = new TreeMap<>();
             weighted.put(typecode, map);
         }
-        map.put(capacity, value);
+        map.put(capacity, value.toLowerCase());
     }
 
     /**
@@ -113,7 +113,7 @@ public class TypeNames
      */
     public void put(int typecode, String value)
     {
-        defaults.put(typecode, value);
+        defaults.put(typecode, value.toLowerCase());
     }
 
     private static String replaceOnce(String template, String placeholder, String replacement)
