@@ -33,7 +33,7 @@ public final class SqlTranslatorTest
     @Test
     public void testTypeMappings() throws Exception
     {
-        String[] dbNames = new String[]{"Oracle9i", "PostgreSQL9", "SQLServer2005", "MySQL5", "SQLServer2008"};
+        String[] dbNames = new String[]{"MySQL5", "Oracle9i", "PostgreSQL9", "SQLServer2005", "SQLServer2008"};
         Arrays.sort(dbNames);
         StringBuilder builder = new StringBuilder(10 * 1024);
         builder.append("<mappings>\n");
