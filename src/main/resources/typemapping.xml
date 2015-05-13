@@ -1,0 +1,169 @@
+<mappings>
+<mapping dbname='MySQL5'>
+<types>
+<type name='INTEGER' template='INTEGER'/>
+<type name='SMALLINT' template='SMALLINT'/>
+<type name='FLOAT' template='FLOAT'/>
+<type name='REAL' template='REAL'/>
+<type name='DOUBLE' template='DOUBLE PRECISION'/>
+<type name='NUMERIC' template='DECIMAL($P,$S)'/>
+<type name='BIT' template='BIT'/>
+<type name='BOOLEAN' template='BIT'/>
+<type name='CHAR' template='CHAR($L)'/>
+<type name='VARCHAR' template='LONGTEXT'>
+<weight size='65535' template='VARCHAR($L)'/>
+</type>
+<type name='CLOB' template='LONGTEXT'/>
+<type name='NCHAR' template='NCHAR($L)'/>
+<type name='NVARCHAR' template='NVARCHAR($L)'/>
+<type name='NCLOB' template='NCLOB'/>
+<type name='DATE' template='DATE'/>
+<type name='TIME' template='TIME'/>
+<type name='TIMESTAMP' template='DATETIME'/>
+<type name='BINARY' template='BINARY($L)'/>
+<type name='VARBINARY' template='LONGBLOB'>
+<weight size='255' template='TINYBLOB'/>
+<weight size='65535' template='BLOB'/>
+<weight size='16777215' template='MEDIUMBLOB'/>
+</type>
+<type name='BLOB' template='LONGBLOB'/>
+</types>
+</mapping>
+<functions>
+<function name='CURRENT_DATE' mapping='CURRENT_DATE'/>
+<function name='CURRENT_TIME' mapping='CURRENT_TIME'/>
+<function name='CURRENT_TIMESTAMP' mapping='CURRENT_TIMESTAMP'/>
+</functions>
+<mapping dbname='Oracle9i'>
+<types>
+<type name='INTEGER' template='NUMBER(10,0)'/>
+<type name='SMALLINT' template='NUMBER(5,0)'/>
+<type name='FLOAT' template='FLOAT'/>
+<type name='REAL' template='REAL'/>
+<type name='DOUBLE' template='DOUBLE PRECISION'/>
+<type name='NUMERIC' template='NUMBER($P,$S)'/>
+<type name='BIT' template='NUMBER(1,0)'/>
+<type name='BOOLEAN' template='NUMBER(1,0)'/>
+<type name='CHAR' template='CHAR($L CHAR)'/>
+<type name='VARCHAR' template='LONG'>
+<weight size='4000' template='VARCHAR2($L CHAR)'/>
+</type>
+<type name='CLOB' template='CLOB'/>
+<type name='NCHAR' template='NCHAR($L)'/>
+<type name='NVARCHAR' template='NVARCHAR($L)'/>
+<type name='NCLOB' template='NCLOB'/>
+<type name='DATE' template='DATE'/>
+<type name='TIME' template='DATE'/>
+<type name='TIMESTAMP' template='TIMESTAMP'/>
+<type name='BINARY' template='LONG RAW'>
+<weight size='2000' template='RAW($L)'/>
+</type>
+<type name='VARBINARY' template='LONG RAW'>
+<weight size='2000' template='RAW($L)'/>
+</type>
+<type name='BLOB' template='BLOB'/>
+</types>
+</mapping>
+<functions>
+<function name='CURRENT_DATE' mapping='CURRENT_DATE'/>
+<function name='CURRENT_TIME' mapping='CURRENT_TIMESTAMP'/>
+<function name='CURRENT_TIMESTAMP' mapping='CURRENT_TIMESTAMP'/>
+</functions>
+<mapping dbname='PostgreSQL9'>
+<types>
+<type name='INTEGER' template='INTEGER'/>
+<type name='SMALLINT' template='SMALLINT'/>
+<type name='FLOAT' template='REAL'/>
+<type name='REAL' template='REAL'/>
+<type name='DOUBLE' template='DOUBLE PRECISION'/>
+<type name='NUMERIC' template='NUMERIC($P,$S)'/>
+<type name='BIT' template='BOOL'/>
+<type name='BOOLEAN' template='BOOLEAN'/>
+<type name='CHAR' template='CHAR($L)'/>
+<type name='VARCHAR' template='VARCHAR($L)'/>
+<type name='CLOB' template='TEXT'/>
+<type name='NCHAR' template='CHAR($L)'/>
+<type name='NVARCHAR' template='VARCHAR($L)'/>
+<type name='NCLOB' template='CLOB'/>
+<type name='DATE' template='DATE'/>
+<type name='TIME' template='TIME'/>
+<type name='TIMESTAMP' template='TIMESTAMP'/>
+<type name='BINARY' template='BYTEA'/>
+<type name='VARBINARY' template='BYTEA'/>
+<type name='BLOB' template='OID'/>
+</types>
+</mapping>
+<functions>
+<function name='CURRENT_DATE' mapping='CURRENT_DATE'/>
+<function name='CURRENT_TIME' mapping='CURRENT_TIME'/>
+<function name='CURRENT_TIMESTAMP' mapping='CURRENT_TIMESTAMP'/>
+</functions>
+<mapping dbname='SQLServer2005'>
+<types>
+<type name='INTEGER' template='INT'/>
+<type name='SMALLINT' template='SMALLINT'/>
+<type name='FLOAT' template='FLOAT'/>
+<type name='REAL' template='REAL'/>
+<type name='DOUBLE' template='DOUBLE PRECISION'/>
+<type name='NUMERIC' template='NUMERIC($P,$S)'/>
+<type name='BIT' template='BIT'/>
+<type name='BOOLEAN' template='BIT'/>
+<type name='CHAR' template='CHAR($L)'/>
+<type name='VARCHAR' template='VARCHAR($L)'/>
+<type name='CLOB' template='VARCHAR(MAX)'/>
+<type name='NCHAR' template='NCHAR($L)'/>
+<type name='NVARCHAR' template='NVARCHAR($L)'/>
+<type name='NCLOB' template='NCLOB'/>
+<type name='DATE' template='DATETIME'/>
+<type name='TIME' template='DATETIME'/>
+<type name='TIMESTAMP' template='DATETIME'/>
+<type name='BINARY' template='BINARY($L)'/>
+<type name='VARBINARY' template='VARBINARY(MAX)'>
+<weight size='8000' template='VARBINARY($L)'/>
+</type>
+<type name='BLOB' template='VARBINARY(MAX)'/>
+</types>
+</mapping>
+<keywords>
+<keyword value='TOP'/>
+</keywords>
+<functions>
+<function name='CURRENT_DATE' mapping='GETDATE()'/>
+<function name='CURRENT_TIME' mapping='GETDATE()'/>
+<function name='CURRENT_TIMESTAMP' mapping='GETDATE()'/>
+</functions>
+<mapping dbname='SQLServer2008'>
+<types>
+<type name='INTEGER' template='INT'/>
+<type name='SMALLINT' template='SMALLINT'/>
+<type name='FLOAT' template='FLOAT'/>
+<type name='REAL' template='REAL'/>
+<type name='DOUBLE' template='DOUBLE PRECISION'/>
+<type name='NUMERIC' template='NUMERIC($P,$S)'/>
+<type name='BIT' template='BIT'/>
+<type name='BOOLEAN' template='BIT'/>
+<type name='CHAR' template='CHAR($L)'/>
+<type name='VARCHAR' template='VARCHAR($L)'/>
+<type name='CLOB' template='VARCHAR(MAX)'/>
+<type name='NCHAR' template='NCHAR($L)'/>
+<type name='NVARCHAR' template='NVARCHAR($L)'/>
+<type name='NCLOB' template='NCLOB'/>
+<type name='DATE' template='DATE'/>
+<type name='TIME' template='TIME'/>
+<type name='TIMESTAMP' template='DATETIME2'/>
+<type name='BINARY' template='BINARY($L)'/>
+<type name='VARBINARY' template='VARBINARY(MAX)'>
+<weight size='8000' template='VARBINARY($L)'/>
+</type>
+<type name='BLOB' template='VARBINARY(MAX)'/>
+</types>
+</mapping>
+<keywords>
+<keyword value='TOP'/>
+</keywords>
+<functions>
+<function name='CURRENT_DATE' mapping='GETDATE()'/>
+<function name='CURRENT_TIME' mapping='GETDATE()'/>
+<function name='CURRENT_TIMESTAMP' mapping='CURRENT_TIMESTAMP'/>
+</functions>
+</mappings>
