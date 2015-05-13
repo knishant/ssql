@@ -113,7 +113,7 @@ public class GenericTranslatorSqlVisitor implements TranslatorSqlVisitor
     }
 
     @Override
-    public void visit(AddColumnStatement statement)
+    public final void visit(AddColumnStatement statement)
     {
         startAlterStatement(statement);
         buffer.append(caseHandler.transform(getAddColumnString())).append(" ");
@@ -132,7 +132,7 @@ public class GenericTranslatorSqlVisitor implements TranslatorSqlVisitor
     }
 
     @Override
-    public void visit(AddTableConstraintStatement statement)
+    public final void visit(AddTableConstraintStatement statement)
     {
         startAlterStatement(statement);
         buffer.append(caseHandler.transform("add constraint "));
@@ -141,7 +141,7 @@ public class GenericTranslatorSqlVisitor implements TranslatorSqlVisitor
     }
 
     @Override
-    public void visit(DropColumnStatement statement)
+    public final void visit(DropColumnStatement statement)
     {
         startAlterStatement(statement);
         buffer.append("drop column ").append(getQuotedIdentifier(statement.getColumnName()));
@@ -149,7 +149,7 @@ public class GenericTranslatorSqlVisitor implements TranslatorSqlVisitor
     }
 
     @Override
-    public void visit(DropTableConstraintStatement statement)
+    public final void visit(DropTableConstraintStatement statement)
     {
         startAlterStatement(statement);
         //foreign key constraint are handled differently in mysql
@@ -167,7 +167,7 @@ public class GenericTranslatorSqlVisitor implements TranslatorSqlVisitor
     }
 
     @Override
-    public void visit(UniqueTableConstraint constraint)
+    public final void visit(UniqueTableConstraint constraint)
     {
         buffer.append(getQuotedIdentifier(constraint.getConstraintName())).append(" ");
         if (TableConstraint.PRIMARY_KEY.equals(constraint.getType()))
@@ -184,15 +184,22 @@ public class GenericTranslatorSqlVisitor implements TranslatorSqlVisitor
     }
 
     @Override
-    public void visit(References references)
+    public final void visit(References references)
     {
         buffer.append(caseHandler.transform("references "))
                 .append(getQuotedIdentifier(references.getTableName())).append(" (");
         appendQuotedIdentifiers(references.getColumnNames());
         buffer.append(")");
-        if (references.isOnDeleteCascade() && supportsCascadeDelete())
+        if (references.isOnDeleteCascade())
         {
-            buffer.append(caseHandler.transform(" on delete cascade"));
+            if (supportsCascadeDelete())
+            {
+                buffer.append(caseHandler.transform(" on delete cascade"));
+            }
+            else
+            {
+                buffer.append(caseHandler.transform(" /*on delete cascade*/"));
+            }
         }
     }
 
@@ -202,7 +209,7 @@ public class GenericTranslatorSqlVisitor implements TranslatorSqlVisitor
     }
 
     @Override
-    public void visit(ForeignKeyTableConstraint constraint)
+    public final void visit(ForeignKeyTableConstraint constraint)
     {
         buffer.append(getQuotedIdentifier(constraint.getConstraintName()))
                 .append(caseHandler.transform(" foreign key ")).append("(");
@@ -212,7 +219,7 @@ public class GenericTranslatorSqlVisitor implements TranslatorSqlVisitor
     }
 
     @Override
-    public void visit(DropSequenceStatement statement)
+    public final void visit(DropSequenceStatement statement)
     {
         if (supportsSequences())
         {
@@ -238,7 +245,7 @@ public class GenericTranslatorSqlVisitor implements TranslatorSqlVisitor
     }
 
     @Override
-    public void visit(DropTableStatement statement)
+    public final void visit(DropTableStatement statement)
     {
         appendComments(statement.getComments());
         buffer.append(caseHandler.transform("drop table "));
@@ -276,7 +283,7 @@ public class GenericTranslatorSqlVisitor implements TranslatorSqlVisitor
     }
 
     @Override
-    public void visit(DropIndexStatement statement)
+    public final void visit(DropIndexStatement statement)
     {
         appendComments(statement.getComments());
         buffer.append(caseHandler.transform("drop index "));
@@ -293,7 +300,7 @@ public class GenericTranslatorSqlVisitor implements TranslatorSqlVisitor
     }
 
     @Override
-    public void visit(ADColumn column)
+    public final void visit(ADColumn column)
     {
         buffer.append(getQuotedIdentifier(column.getColumnName()));
         if (column.getAscDesc() != null)
@@ -326,7 +333,7 @@ public class GenericTranslatorSqlVisitor implements TranslatorSqlVisitor
     }
 
     @Override
-    public void visit(CreateIndexStatement statement)
+    public final void visit(CreateIndexStatement statement)
     {
         startCreateStatement(statement);
         if (statement.isUnique())
@@ -351,13 +358,13 @@ public class GenericTranslatorSqlVisitor implements TranslatorSqlVisitor
     }
 
     @Override
-    public void visit(InsertStatement statement)
+    public final void visit(InsertStatement statement)
     {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public void visit(CreateSequenceStatement statement)
+    public final void visit(CreateSequenceStatement statement)
     {
         startCreateStatement(statement);
         buffer.append(caseHandler.transform("sequence ")).append(getQuotedIdentifier(statement.getName()));
@@ -419,7 +426,7 @@ public class GenericTranslatorSqlVisitor implements TranslatorSqlVisitor
     }
 
     @Override
-    public void visit(PredefinedType type)
+    public final void visit(PredefinedType type)
     {
         String datatype;
         int sqlCode = type.getType();
@@ -438,7 +445,7 @@ public class GenericTranslatorSqlVisitor implements TranslatorSqlVisitor
     }
 
     @Override
-    public void visit(Value value)
+    public final void visit(Value value)
     {
         String dateValueFunction = value.getDateValueFunction();
         if (dateValueFunction != null)
@@ -519,7 +526,7 @@ public class GenericTranslatorSqlVisitor implements TranslatorSqlVisitor
                 String commentStr = comment.getComment();
                 if (comment.getKind() == 1 && needsSpaceAfterDoubleDashComment())
                 {
-                    commentStr = commentStr.replaceFirst("--([^ ])","-- $1");
+                    commentStr = commentStr.replaceFirst("--([^ ])", "-- $1");
                 }
                 buffer.append(commentStr).append("\n");
             }
@@ -532,7 +539,7 @@ public class GenericTranslatorSqlVisitor implements TranslatorSqlVisitor
     }
 
     @Override
-    public void visit(CreateTableStatement statement)
+    public final void visit(CreateTableStatement statement)
     {
         startCreateStatement(statement);
         //TODO qualified name
@@ -573,7 +580,7 @@ public class GenericTranslatorSqlVisitor implements TranslatorSqlVisitor
 
 
     @Override
-    public void visit(PlaceHolder placeHolder)
+    public final void visit(PlaceHolder placeHolder)
     {
         //currently handling on the literal type
         assert PlaceHolder.LITERAL_TYPE.equals(placeHolder.getType());
