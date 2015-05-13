@@ -21,12 +21,6 @@ public class HSQL2TranslatorSqlVisitor extends GenericTranslatorSqlVisitor
     }
 
     @Override
-    public boolean supportsIfExistsAfterTableName()
-    {
-        return true;
-    }
-
-    @Override
     public boolean supportsSequences()
     {
         return true;

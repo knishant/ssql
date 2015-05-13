@@ -40,7 +40,7 @@ public class Oracle9iTranslatorSqlVisitor extends GenericTranslatorSqlVisitor
     @Override
     public String getCascadeConstraintsString()
     {
-        return " cascade constraints";
+        return "cascade constraints";
     }
 
     @Override

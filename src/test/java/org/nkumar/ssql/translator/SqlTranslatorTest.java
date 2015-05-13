@@ -62,6 +62,7 @@ public final class SqlTranslatorTest
     public void translateSpringBatchDDL() throws Exception
     {
         assertCorrectTranslation("spring_batch.sql", "Identity", "MySQL5","Oracle9i", "PostgreSQL9", "SQLServer2005");
+        assertCorrectTranslation("spring_batch_drop.sql", "Identity", "MySQL5","Oracle9i", "PostgreSQL9", "SQLServer2005");
     }
 
     private static void assertCorrectTranslation(String sqlFileName, String... dbnames) throws Exception

@@ -28,7 +28,7 @@ public final class PostgreSQL9TranslatorSqlVisitor extends GenericTranslatorSqlV
     @Override
     public String getCascadeConstraintsString()
     {
-        return " cascade";
+        return "cascade";
     }
 
     @Override

@@ -257,18 +257,10 @@ public class GenericTranslatorSqlVisitor implements TranslatorSqlVisitor
         buffer.append(getQuotedIdentifier(statement.getName()));
         if (statement.isCascadeConstraint())
         {
-            buffer.append(getCascadeConstraintsString());
-        }
-        if (supportsIfExistsAfterTableName())
-        {
-            buffer.append(caseHandler.transform(" if exists"));
+            buffer.append(" ");
+            buffer.append(caseHandler.transform(getCascadeConstraintsString()));
         }
         terminateStatement();
-    }
-
-    protected boolean supportsIfExistsAfterTableName()
-    {
-        return false;
     }
 
     protected boolean supportsIfExistsBeforeTableName()
@@ -279,7 +271,7 @@ public class GenericTranslatorSqlVisitor implements TranslatorSqlVisitor
 
     protected String getCascadeConstraintsString()
     {
-        return "";
+        return "/*cascade constraints*/";
     }
 
     @Override
@@ -287,15 +279,11 @@ public class GenericTranslatorSqlVisitor implements TranslatorSqlVisitor
     {
         appendComments(statement.getComments());
         buffer.append(caseHandler.transform("drop index "));
-//        if (dialect.supportsIfExistsBeforeTableName())
-//        {
-//            buffer.append("if exists ");
-//        }
+        if (supportsIfExistsBeforeTableName())
+        {
+            buffer.append(caseHandler.transform("if exists "));
+        }
         buffer.append(getQuotedIdentifier(statement.getName()));
-//        if (dialect.supportsIfExistsAfterTableName())
-//        {
-//            buffer.append(" if exists");
-//        }
         terminateStatement();
     }
 

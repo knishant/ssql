@@ -7,4 +7,10 @@ public final class IdentityTranslatorSqlVisitor extends GenericTranslatorSqlVisi
         super("Identity");
     }
 
+    @Override
+    protected String getCascadeConstraintsString()
+    {
+        return "cascade constraints";
+    }
+
 }
