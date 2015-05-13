@@ -1,6 +1,5 @@
 package org.nkumar.ssql.util;
 
-import java.io.Closeable;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -73,48 +72,24 @@ public final class Util
 
     public static String readFileAsString(File file) throws IOException
     {
-        Reader in = new InputStreamReader(new FileInputStream(file), "UTF-8");
-        char[] buffer = new char[1024];
+        char[] buffer = new char[1000];
         int read;
-        StringBuilder builder = new StringBuilder(8 * 1024);
-        try
+        StringBuilder builder = new StringBuilder(8 * 1000);
+        try(Reader in = new InputStreamReader(new FileInputStream(file), "UTF-8"))
         {
             while ((read = in.read(buffer)) != -1)
             {
                 builder.append(buffer, 0, read);
             }
         }
-        finally
-        {
-            closeStreamQuietly(in);
-        }
         return builder.toString();
     }
 
     public static void writeStringToFile(File file, String str) throws IOException
     {
-        Writer out = new OutputStreamWriter(new FileOutputStream(file), "UTF-8");
-        try
+        try(Writer out = new OutputStreamWriter(new FileOutputStream(file), "UTF-8"))
         {
             out.write(str);
-        }
-        finally
-        {
-            closeStreamQuietly(out);
-        }
-    }
-
-    public static void closeStreamQuietly(Closeable closeable)
-    {
-        try
-        {
-            if (closeable != null)
-            {
-                closeable.close();
-            }
-        }
-        catch (IOException ignore)
-        {
         }
     }
 

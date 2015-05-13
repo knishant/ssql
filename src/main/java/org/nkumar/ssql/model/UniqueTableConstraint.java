@@ -8,9 +8,9 @@ public final class UniqueTableConstraint extends TableConstraint
 {
     private final List<String> columnList;
 
-    public UniqueTableConstraint(String type, List<String> columnList)
+    public UniqueTableConstraint(String keytype, List<String> columnList)
     {
-        super(type);
+        super(keytype);
         assert PRIMARY_KEY.equals(type) || UNIQUE.equals(type);
         assert !Util.isEmptyCollection(columnList);
         this.columnList = columnList;
