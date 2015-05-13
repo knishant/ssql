@@ -49,13 +49,13 @@ public final class SqlTranslatorTest
         FileWriter out = new FileWriter(actualFile);
         out.write(builder.toString());
         out.close();
-        TUtil.assertSameContent(new File(BASE_EXP_DIR, "../typemapping.xml"), actualFile);
+        TUtil.assertSameContent(new File("src/main/resources/typemapping.xml"), actualFile);
     }
 
     @Test
     public void translateDDL1() throws Exception
     {
-        assertCorrectTranslation("ddl_1.sql", "Identity", "Oracle9i", "PostgreSQL9", "SQLServer2005");
+        assertCorrectTranslation("ddl_1.sql", "Identity", "MySQL5","Oracle9i", "PostgreSQL9", "SQLServer2005");
     }
 
     private static void assertCorrectTranslation(String sqlFileName, String... dbnames) throws Exception
