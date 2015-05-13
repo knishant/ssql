@@ -2,12 +2,17 @@ package org.nkumar.ssql.translater;
 
 import java.sql.Types;
 
-public class Oracle9iTranslatorSqlVisitor extends GenericTranslatorSqlVisitor
+public class Oracle9iDialect extends Dialect
 {
-    @SuppressWarnings("MagicNumber")
-    public Oracle9iTranslatorSqlVisitor()
+    public Oracle9iDialect()
     {
-        super("Oracle9i");
+        this("Oracle9i");
+    }
+
+    @SuppressWarnings("MagicNumber")
+    protected Oracle9iDialect(String dbName)
+    {
+        super(dbName);
         typeNames.put(Types.CHAR, "char($l char)");
         typeNames.put(Types.VARCHAR, 4000, "varchar2($l char)");
         typeNames.put(Types.VARCHAR, "long");

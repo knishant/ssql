@@ -2,13 +2,13 @@ package org.nkumar.ssql.translator;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.nkumar.ssql.translater.GenericTranslatorSqlVisitor;
-import org.nkumar.ssql.translater.IdentityTranslatorSqlVisitor;
-import org.nkumar.ssql.translater.MySQL5InnoDBTranslatorSqlVisitor;
-import org.nkumar.ssql.translater.Oracle9iTranslatorSqlVisitor;
-import org.nkumar.ssql.translater.PostgreSQL9TranslatorSqlVisitor;
-import org.nkumar.ssql.translater.SQLServer2005TranslatorSqlVisitor;
-import org.nkumar.ssql.translater.SQLServer2008TranslatorSqlVisitor;
+import org.nkumar.ssql.translater.Dialect;
+import org.nkumar.ssql.translater.IdentityDialect;
+import org.nkumar.ssql.translater.MySQL5InnoDBDialect;
+import org.nkumar.ssql.translater.Oracle9iDialect;
+import org.nkumar.ssql.translater.PostgreSQL9Dialect;
+import org.nkumar.ssql.translater.SQLServer2005Dialect;
+import org.nkumar.ssql.translater.SQLServer2008Dialect;
 import org.nkumar.ssql.translater.SqlTranslator;
 import org.nkumar.ssql.util.TUtil;
 
@@ -38,10 +38,9 @@ public final class SqlTranslatorTest
         builder.append("<mappings>\n");
         for (String dbName : dbNames)
         {
-            String translatorName = getTranslatorName(dbName);
-            GenericTranslatorSqlVisitor translator =
-                    (GenericTranslatorSqlVisitor) Class.forName(translatorName).newInstance();
-            builder.append(translator.toXml());
+            String dialectName = getDialectName(dbName);
+            Dialect dialect = (Dialect) Class.forName(dialectName).newInstance();
+            builder.append(dialect.toXml());
         }
         builder.append("</mappings>\n");
         File actualFile = new File(BASE_TRANS_DIR, "../typemapping.xml");
@@ -73,7 +72,7 @@ public final class SqlTranslatorTest
     private static void assertCorrectTranslation(String sqlFileName, String... dbnames) throws Exception
     {
         File srcFile = new File(BASE_RSRC_DIR, "sqltranslatortest/" + sqlFileName);
-        String[] translatorNames = getTranslatorNames(dbnames);
+        String[] translatorNames = getDialectNames(dbnames);
         SqlTranslator.translateSqlFileToMultipleTranslators(srcFile, BASE_TRANS_DIR, translatorNames);
         for (String dbname : dbnames)
         {
@@ -84,32 +83,32 @@ public final class SqlTranslatorTest
         }
     }
 
-    private static String[] getTranslatorNames(String... dbNames)
+    private static String[] getDialectNames(String... dbNames)
     {
         String[] names = new String[dbNames.length];
         for (int i = 0; i < dbNames.length; i++)
         {
-            names[i] = getTranslatorName(dbNames[i]);
+            names[i] = getDialectName(dbNames[i]);
         }
         return names;
     }
 
-    private static String getTranslatorName(String dbName)
+    private static String getDialectName(String dbName)
     {
         switch (dbName)
         {
             case "Identity":
-                return IdentityTranslatorSqlVisitor.class.getName();
+                return IdentityDialect.class.getName();
             case "Oracle9i":
-                return Oracle9iTranslatorSqlVisitor.class.getName();
+                return Oracle9iDialect.class.getName();
             case "PostgreSQL9":
-                return PostgreSQL9TranslatorSqlVisitor.class.getName();
+                return PostgreSQL9Dialect.class.getName();
             case "MySQL5InnoDB":
-                return MySQL5InnoDBTranslatorSqlVisitor.class.getName();
+                return MySQL5InnoDBDialect.class.getName();
             case "SQLServer2005":
-                return SQLServer2005TranslatorSqlVisitor.class.getName();
+                return SQLServer2005Dialect.class.getName();
             case "SQLServer2008":
-                return SQLServer2008TranslatorSqlVisitor.class.getName();
+                return SQLServer2008Dialect.class.getName();
             default:
                 throw new AssertionError(dbName + " not supported");
         }

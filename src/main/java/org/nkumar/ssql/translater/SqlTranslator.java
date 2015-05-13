@@ -19,47 +19,47 @@ public final class SqlTranslator
         return (List<SqlVisitable>) SqlParser.parseDdls(sql);
     }
 
-    public static TranslatorSqlVisitor createVisitor(String tsvClass) throws Exception
+    public static TranslatorSqlVisitor createVisitor(String dialectClassName) throws Exception
     {
-        if (tsvClass == null)
+        if (dialectClassName == null)
         {
-            throw new IllegalArgumentException("TranslatorSqlVisitor class name was null");
+            throw new IllegalArgumentException("Dialect class name was null");
         }
-        tsvClass = tsvClass.trim();
+        dialectClassName = dialectClassName.trim();
         Class<?> clazz;
         try
         {
-            clazz = Class.forName(tsvClass);
+            clazz = Class.forName(dialectClassName);
         }
         catch (ClassNotFoundException e)
         {
-            throw new RuntimeException("Could not load the TranslatorSqlVisitor class - " + tsvClass, e);
+            throw new RuntimeException("Could not load the Dialect class - " + dialectClassName, e);
         }
-        TranslatorSqlVisitor tsv;
+        Dialect dialect;
         try
         {
-            tsv = (TranslatorSqlVisitor) clazz.newInstance();
+            dialect = (Dialect) clazz.newInstance();
         }
         catch (ClassCastException e)
         {
-            throw new RuntimeException(tsvClass + " not of type TranslatorSqlVisitor", e);
+            throw new RuntimeException(dialectClassName + " not of type TranslatorSqlVisitor", e);
         }
         catch (Exception e)
         {
-            throw new RuntimeException("Could not create an instance of - " + tsvClass, e);
+            throw new RuntimeException("Could not create an instance of - " + dialectClassName, e);
         }
-        return tsv;
+        return new GenericTranslatorSqlVisitor(dialect);
     }
 
-    public static void translateSqlFile(File srcFile, File destFile, String tsvClassName) throws Exception
+    public static void translateSqlFile(File srcFile, File destFile, String dialectClassName) throws Exception
     {
         List<SqlVisitable> list = parseSql(Util.readFileAsString(srcFile));
-        TranslatorSqlVisitor visitor = createVisitor(tsvClassName);
+        TranslatorSqlVisitor visitor = createVisitor(dialectClassName);
         String generatedSql = translate(list, visitor);
         Util.writeStringToFile(destFile, generatedSql);
     }
 
-    private static String translate(List<SqlVisitable> list, TranslatorSqlVisitor visitor)
+    private static String translate(Iterable<SqlVisitable> list, TranslatorSqlVisitor visitor)
     {
         for (SqlVisitable sql : list)
         {
@@ -69,11 +69,11 @@ public final class SqlTranslator
     }
 
     @SuppressWarnings("ResultOfMethodCallIgnored")
-    public static void translateSqlFileToMultipleTranslators(File srcFile, File destDir, String... tsvClassNames)
+    public static void translateSqlFileToMultipleTranslators(File srcFile, File destDir, String... dialectClassNames)
             throws Exception
     {
         List<SqlVisitable> list = parseSql(Util.readFileAsString(srcFile));
-        for (String dialectClass : tsvClassNames)
+        for (String dialectClass : dialectClassNames)
         {
             TranslatorSqlVisitor visitor = createVisitor(dialectClass);
             File dialectDir = new File(destDir, visitor.getDbName());
@@ -84,7 +84,7 @@ public final class SqlTranslator
         }
     }
 
-    public static void translateSqlDirToMultipleTranslators(File srcDir, File destDir, String... tsvClassNames)
+    public static void translateSqlDirToMultipleTranslators(File srcDir, File destDir, String... dialectClassNames)
             throws Exception
     {
         if (!srcDir.isDirectory())
@@ -98,7 +98,7 @@ public final class SqlTranslator
             {
                 if (file.getName().toLowerCase().endsWith(".sql"))
                 {
-                    translateSqlFileToMultipleTranslators(file, destDir, tsvClassNames);
+                    translateSqlFileToMultipleTranslators(file, destDir, dialectClassNames);
                 }
             }
         }
@@ -106,8 +106,8 @@ public final class SqlTranslator
 
     public static void main(String[] args) throws Exception
     {
-        String[] tsvClassNames = new String[args.length - 2];
-        System.arraycopy(args, 2, tsvClassNames, 0, tsvClassNames.length);
-        translateSqlDirToMultipleTranslators(new File(args[0]), new File(args[1]), tsvClassNames);
+        String[] dialectClassNames = new String[args.length - 2];
+        System.arraycopy(args, 2, dialectClassNames, 0, dialectClassNames.length);
+        translateSqlDirToMultipleTranslators(new File(args[0]), new File(args[1]), dialectClassNames);
     }
 }

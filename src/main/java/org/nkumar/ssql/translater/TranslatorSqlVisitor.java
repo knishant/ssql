@@ -7,6 +7,4 @@ public interface TranslatorSqlVisitor extends SqlVisitor
     public String getDbName();
 
     public String getGeneratedSql();
-
-    public void clearBuffer();
 }

@@ -27,71 +27,22 @@ import org.nkumar.ssql.model.UniqueTableConstraint;
 import org.nkumar.ssql.model.Value;
 import org.nkumar.ssql.util.Util;
 
-import java.sql.Types;
 import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeMap;
-import java.util.TreeSet;
 
-public class GenericTranslatorSqlVisitor implements TranslatorSqlVisitor
+public final class GenericTranslatorSqlVisitor implements TranslatorSqlVisitor
 {
     private static final String PADDEDCOLUMN_MODE = "paddedcolumn";
 
     private final StringBuilder buffer = new StringBuilder(8 * 1000);
     private final Mode mode = new Mode();
 
-    private final String dbName;
+    private final Dialect dialect;
 
-    protected final TypeNames typeNames = new TypeNames();
+    private final CaseHandler caseHandler = CaseHandler.Factory.create(CaseHandler.Factory.UPPER);
 
-    protected final Map<String, String> functions = new TreeMap<>();
-
-    private final Set<String> keywords = new TreeSet<>();
-
-    protected final CaseHandler caseHandler = CaseHandler.Factory.create(CaseHandler.Factory.UPPER);
-
-    protected GenericTranslatorSqlVisitor(String dbName)
+    public GenericTranslatorSqlVisitor(Dialect dialect)
     {
-        this.dbName = dbName;
-        registerTypes();
-        registerFunctions();
-    }
-
-    private void registerFunctions()
-    {
-        functions.put("current_date", "current_date");
-        functions.put("current_time", "current_time");
-        functions.put("current_timestamp", "current_timestamp");
-    }
-
-    private void registerTypes()
-    {
-        typeNames.put(Types.BIT, "bit");
-        typeNames.put(Types.BOOLEAN, "boolean");
-        typeNames.put(Types.TINYINT, "tinyint");
-        typeNames.put(Types.SMALLINT, "smallint");
-        typeNames.put(Types.INTEGER, "int");
-        typeNames.put(Types.BIGINT, "bigint");
-        typeNames.put(Types.FLOAT, "float");
-        typeNames.put(Types.DOUBLE, "double precision");
-        typeNames.put(Types.NUMERIC, "numeric($p,$s)");
-        typeNames.put(Types.REAL, "real");
-
-        typeNames.put(Types.DATE, "date");
-        typeNames.put(Types.TIME, "time");
-        typeNames.put(Types.TIMESTAMP, "timestamp");
-
-        typeNames.put(Types.VARBINARY, "bit varying($l)");
-        typeNames.put(Types.BLOB, "blob");
-
-        typeNames.put(Types.CHAR, "char($l)");
-        typeNames.put(Types.VARCHAR, "varchar($l)");
-        typeNames.put(Types.CLOB, "clob");
-
-        typeNames.put(Types.NCHAR, "nchar($l)");
-        typeNames.put(Types.NVARCHAR, "nvarchar($l)");
-        typeNames.put(Types.NCLOB, "nclob");
+        this.dialect = dialect;
     }
 
     @Override
@@ -101,32 +52,22 @@ public class GenericTranslatorSqlVisitor implements TranslatorSqlVisitor
     }
 
     @Override
-    public final void clearBuffer()
-    {
-        this.buffer.setLength(0);
-    }
-
-    @Override
     public final String getDbName()
     {
-        return dbName;
+        return dialect.getDbName();
     }
 
     @Override
     public final void visit(AddColumnStatement statement)
     {
         startAlterStatement(statement);
-        buffer.append(caseHandler.transform(getAddColumnString())).append(" ");
+        buffer.append(caseHandler.transform(dialect.getAddColumnString())).append(" ");
         statement.getColumn().accept(this);
         terminateStatement();
     }
 
-    protected String getAddColumnString()
-    {
-        return "add column";
-    }
 
-    protected void terminateStatement()
+    private void terminateStatement()
     {
         buffer.append(";\n\n");
     }
@@ -183,11 +124,6 @@ public class GenericTranslatorSqlVisitor implements TranslatorSqlVisitor
         buffer.append(")");
     }
 
-    protected String getTableTypeString()
-    {
-        return "";
-    }
-
     @Override
     public final void visit(References references)
     {
@@ -214,7 +150,7 @@ public class GenericTranslatorSqlVisitor implements TranslatorSqlVisitor
     @Override
     public final void visit(DropSequenceStatement statement)
     {
-        if (supportsSequences())
+        if (dialect.supportsSequences())
         {
             appendComments(statement.getComments());
             String dropSequenceString = getDropSequenceString(statement.getName());
@@ -226,14 +162,10 @@ public class GenericTranslatorSqlVisitor implements TranslatorSqlVisitor
         }
     }
 
-    protected boolean supportsSequences()
-    {
-        return false;
-    }
 
     private String getDropSequenceString(String sequenceName)
     {
-        assert supportsSequences();
+        assert dialect.supportsSequences();
         return caseHandler.transform("drop sequence ") + getQuotedIdentifier(sequenceName);
     }
 
@@ -242,7 +174,7 @@ public class GenericTranslatorSqlVisitor implements TranslatorSqlVisitor
     {
         appendComments(statement.getComments());
         buffer.append(caseHandler.transform("drop table "));
-        if (supportsIfExistsBeforeTableName())
+        if (dialect.supportsIfExistsBeforeTableName())
         {
             buffer.append(caseHandler.transform("if exists "));
         }
@@ -251,28 +183,19 @@ public class GenericTranslatorSqlVisitor implements TranslatorSqlVisitor
         if (statement.isCascadeConstraint())
         {
             buffer.append(" ");
-            buffer.append(caseHandler.transform(getCascadeConstraintsString()));
+            buffer.append(caseHandler.transform(dialect.getCascadeConstraintsString()));
         }
         terminateStatement();
     }
 
-    protected boolean supportsIfExistsBeforeTableName()
-    {
-        return false;
-    }
 
-
-    protected String getCascadeConstraintsString()
-    {
-        return "/*cascade constraints*/";
-    }
 
     @Override
     public final void visit(DropIndexStatement statement)
     {
         appendComments(statement.getComments());
         buffer.append(caseHandler.transform("drop index "));
-        if (supportsIfExistsBeforeTableName())
+        if (dialect.supportsIfExistsBeforeTableName())
         {
             buffer.append(caseHandler.transform("if exists "));
         }
@@ -301,11 +224,12 @@ public class GenericTranslatorSqlVisitor implements TranslatorSqlVisitor
     {
         appendSpaceIfNecessary();
         appendPlaceHolder(statement.getClosingPlaceHolder());
-        trimRight();
         if (statement instanceof CreateTableStatement)
         {
-            buffer.append(getTableTypeString());
+            trimRight();
+            buffer.append(dialect.getTableTypeString());
         }
+        trimRight();
         terminateStatement();
     }
 
@@ -418,12 +342,12 @@ public class GenericTranslatorSqlVisitor implements TranslatorSqlVisitor
         if (type.isLengthSet() || type.isPrecisionScaleSet())
         {
             PrecisionScaleBean precisionScale = type.getPrecisionScale();
-            datatype = typeNames.getTypeName(sqlCode, type.getLength(),
+            datatype = dialect.getTypeName(sqlCode, type.getLength(),
                     precisionScale.getPrecision(), precisionScale.getScale());
         }
         else
         {
-            datatype = typeNames.getTypeName(sqlCode);
+            datatype = dialect.getTypeName(sqlCode);
         }
 
         buffer.append(caseHandler.transform(datatype)).append(" ");
@@ -435,7 +359,7 @@ public class GenericTranslatorSqlVisitor implements TranslatorSqlVisitor
         String dateValueFunction = value.getDateValueFunction();
         if (dateValueFunction != null)
         {
-            String sqlFunction = functions.get(dateValueFunction);
+            String sqlFunction = dialect.getFunctionName(dateValueFunction);
             if (sqlFunction != null)
             {
                 buffer.append(caseHandler.transform(sqlFunction));
@@ -443,7 +367,7 @@ public class GenericTranslatorSqlVisitor implements TranslatorSqlVisitor
             else
             {
                 //noinspection UseOfSystemOutOrSystemErr
-                System.err.println(dateValueFunction + " is not supported in  " + dbName);
+                System.err.println(dateValueFunction + " is not supported in  " + dialect.getDbName());
             }
         }
         else if (value.isNullValue())
@@ -511,7 +435,7 @@ public class GenericTranslatorSqlVisitor implements TranslatorSqlVisitor
                     buffer.append(padding);
                 }
                 String commentStr = comment.getComment();
-                if (comment.getKind() == 1 && needsSpaceAfterDoubleDashComment())
+                if (comment.getKind() == 1 && dialect.needsSpaceAfterDoubleDashComment())
                 {
                     commentStr = commentStr.replaceFirst("--([^ ])", "-- $1");
                 }
@@ -520,10 +444,6 @@ public class GenericTranslatorSqlVisitor implements TranslatorSqlVisitor
         }
     }
 
-    protected boolean needsSpaceAfterDoubleDashComment()
-    {
-        return false;
-    }
 
     @Override
     public final void visit(CreateTableStatement statement)
@@ -571,7 +491,7 @@ public class GenericTranslatorSqlVisitor implements TranslatorSqlVisitor
     {
         //currently handling on the literal type
         assert PlaceHolder.LITERAL_TYPE.equals(placeHolder.getType());
-        String literal = placeHolder.getLiteral(dbName);
+        String literal = placeHolder.getLiteral(dialect.getDbName());
         if (literal != null)
         {
             buffer.append(literal).append(" ");
@@ -605,34 +525,13 @@ public class GenericTranslatorSqlVisitor implements TranslatorSqlVisitor
         }
     }
 
-    protected char openQuote()
-    {
-        return '"';
-    }
 
-    protected char closeQuote()
-    {
-        return '"';
-    }
-
-    protected final void addKeywords(String... strs)
-    {
-        for (String str : strs)
-        {
-            keywords.add(str.trim().toLowerCase());
-        }
-    }
-
-    private boolean isKeyword(String str)
-    {
-        return str != null && keywords.contains(str.toLowerCase());
-    }
 
     private String getQuotedIdentifier(String identifier)
     {
         identifier = caseHandler.transform(identifier);
-        boolean keyword = isKeyword(identifier);
-        return keyword ? openQuote() + identifier + closeQuote() : identifier;
+        boolean keyword = dialect.isKeyword(identifier);
+        return keyword ? dialect.openQuote() + identifier + dialect.closeQuote() : identifier;
     }
 
     private void appendQuotedIdentifiers(Iterable<String> identifiers)
@@ -649,34 +548,5 @@ public class GenericTranslatorSqlVisitor implements TranslatorSqlVisitor
                 }
             }
         }
-    }
-
-    public final String toXml()
-    {
-        StringBuilder builder = new StringBuilder(1000);
-        builder.append("<mapping dbname='").append(dbName).append("'>\n");
-        builder.append(typeNames.toXml());
-        builder.append("</mapping>\n");
-        if (!keywords.isEmpty())
-        {
-            builder.append("<keywords>\n");
-            for (String keyword : keywords)
-            {
-                builder.append("<keyword value='").append(keyword.toUpperCase()).append("'/>\n");
-            }
-            builder.append("</keywords>\n");
-        }
-        if (!functions.isEmpty())
-        {
-            builder.append("<functions>\n");
-            for (Map.Entry<String, String> entry : functions.entrySet())
-            {
-                builder.append("<function name='")
-                        .append(entry.getKey().toUpperCase()).append("' mapping='")
-                        .append(entry.getValue().toUpperCase()).append("'/>\n");
-            }
-            builder.append("</functions>\n");
-        }
-        return builder.toString();
     }
 }

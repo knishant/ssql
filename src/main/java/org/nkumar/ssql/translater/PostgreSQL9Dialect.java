@@ -2,16 +2,16 @@ package org.nkumar.ssql.translater;
 
 import java.sql.Types;
 
-public final class PostgreSQL9TranslatorSqlVisitor extends GenericTranslatorSqlVisitor
+public class PostgreSQL9Dialect extends Dialect
 {
-    public PostgreSQL9TranslatorSqlVisitor()
+    public PostgreSQL9Dialect()
     {
-        super("PostgreSQL9");
-        registerPostgreSQLTypes();
+        this("PostgreSQL9");
     }
 
-    private void registerPostgreSQLTypes()
+    protected PostgreSQL9Dialect(String dbName)
     {
+        super(dbName);
         typeNames.put(Types.BIT, "bool");
         typeNames.put(Types.TINYINT, "smallint");
         typeNames.put(Types.INTEGER, "integer");
