@@ -15,14 +15,14 @@ public final class PostgreSQL9TranslatorSqlVisitor extends GenericTranslatorSqlV
         typeNames.put(Types.BIT, "bool");
         typeNames.put(Types.TINYINT, "smallint");
         typeNames.put(Types.FLOAT, "real");
-        typeNames.put(Types.DOUBLE, "double precision");
         typeNames.put(Types.VARBINARY, "bytea");
         typeNames.put(Types.BINARY, "bytea");
-        typeNames.put(Types.LONGVARCHAR, "text");
-        typeNames.put(Types.LONGVARBINARY, "bytea");
         typeNames.put(Types.CLOB, "text");
         typeNames.put(Types.BLOB, "oid");
-        typeNames.put(Types.OTHER, "uuid");
+
+        typeNames.put(Types.NCHAR, "char($l)");
+        typeNames.put(Types.NVARCHAR, "varchar($l)");
+        typeNames.put(Types.NCLOB, "clob");
     }
 
     @Override

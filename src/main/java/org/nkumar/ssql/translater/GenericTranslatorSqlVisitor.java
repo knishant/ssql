@@ -83,17 +83,14 @@ public class GenericTranslatorSqlVisitor implements TranslatorSqlVisitor
         typeNames.put(Types.TIMESTAMP, "timestamp");
 
         typeNames.put(Types.VARBINARY, "bit varying($l)");
-        typeNames.put(Types.LONGVARBINARY, "bit varying($l)");
         typeNames.put(Types.BLOB, "blob");
 
         typeNames.put(Types.CHAR, "char($l)");
         typeNames.put(Types.VARCHAR, "varchar($l)");
-        typeNames.put(Types.LONGVARCHAR, "varchar($l)");
         typeNames.put(Types.CLOB, "clob");
 
         typeNames.put(Types.NCHAR, "nchar($l)");
         typeNames.put(Types.NVARCHAR, "nvarchar($l)");
-        typeNames.put(Types.LONGNVARCHAR, "nvarchar($l)");
         typeNames.put(Types.NCLOB, "nclob");
     }
 

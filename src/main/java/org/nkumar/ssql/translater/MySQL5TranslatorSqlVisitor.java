@@ -18,19 +18,11 @@ public class MySQL5TranslatorSqlVisitor extends GenericTranslatorSqlVisitor
         typeNames.put(Types.VARBINARY, 65535, "blob");
         typeNames.put(Types.VARBINARY, 255, "tinyblob");
         typeNames.put(Types.BINARY, "binary($l)");
-        typeNames.put(Types.LONGVARBINARY, "longblob");
-        typeNames.put(Types.LONGVARBINARY, 16777215, "mediumblob");
         typeNames.put(Types.NUMERIC, "decimal($p,$s)");
         typeNames.put(Types.BLOB, "longblob");
         typeNames.put(Types.CLOB, "longtext");
-        registerVarcharTypes();
-    }
-
-    protected void registerVarcharTypes()
-    {
         typeNames.put(Types.VARCHAR, "longtext");
         typeNames.put(Types.VARCHAR, 65535, "varchar($l)");
-        typeNames.put(Types.LONGVARCHAR, "longtext");
     }
 
     @Override

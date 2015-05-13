@@ -2,9 +2,12 @@ package org.nkumar.ssql.translator;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.nkumar.ssql.translater.HSQL2TranslatorSqlVisitor;
 import org.nkumar.ssql.translater.IdentityTranslatorSqlVisitor;
+import org.nkumar.ssql.translater.MySQL5TranslatorSqlVisitor;
 import org.nkumar.ssql.translater.Oracle9iTranslatorSqlVisitor;
 import org.nkumar.ssql.translater.PostgreSQL9TranslatorSqlVisitor;
+import org.nkumar.ssql.translater.SQLServer2005TranslatorSqlVisitor;
 import org.nkumar.ssql.translater.SqlTranslator;
 import org.nkumar.ssql.util.TUtil;
 
@@ -26,7 +29,7 @@ public final class SqlTranslatorTest
     @Test
     public void translateDDL1() throws Exception
     {
-        assertCorrectTranslation("ddl_1.sql", "Identity", "Oracle9i", "PostgreSQL9");
+        assertCorrectTranslation("ddl_1.sql", "Identity", "Oracle9i", "PostgreSQL9", "SQLServer2005");
     }
 
     private static void assertCorrectTranslation(String sqlFileName, String... dbnames) throws Exception
@@ -63,6 +66,12 @@ public final class SqlTranslatorTest
                 return Oracle9iTranslatorSqlVisitor.class.getName();
             case "PostgreSQL9":
                 return PostgreSQL9TranslatorSqlVisitor.class.getName();
+            case "MySQL5":
+                return MySQL5TranslatorSqlVisitor.class.getName();
+            case "HSQL2":
+                return HSQL2TranslatorSqlVisitor.class.getName();
+            case "SQLServer2005":
+                return SQLServer2005TranslatorSqlVisitor.class.getName();
             default:
                 throw new AssertionError(dbName + " not supported");
         }

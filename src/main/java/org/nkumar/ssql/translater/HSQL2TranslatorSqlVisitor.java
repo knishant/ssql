@@ -15,12 +15,9 @@ public class HSQL2TranslatorSqlVisitor extends GenericTranslatorSqlVisitor
         typeNames.put(Types.BINARY, "binary($l)");
 
         typeNames.put(Types.DECIMAL, "decimal($p,$s)");
-        typeNames.put(Types.LONGVARCHAR, "longvarchar");
         typeNames.put(Types.VARBINARY, "varbinary($l)");
         typeNames.put(Types.DOUBLE, "double" );
 
-        typeNames.put(Types.BLOB, "blob");
-        typeNames.put(Types.CLOB, "clob");
     }
 
     @Override
