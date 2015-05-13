@@ -24,4 +24,4 @@ create index ABC_FK1 ON abc (col1b);
 
 alter TABLE abc add CONSTRAINT abc_fk1 foreign KEY (col1b) REFERENCES ANOTHER_TABLE (col1) on delete cascade;
 
-
+alter table abc add column col20 bigint default 0 not null;
