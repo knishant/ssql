@@ -1,7 +1,7 @@
 <mappings>
 <mapping dbname='MySQL5'>
 <types>
-<type name='INTEGER' template='INTEGER'/>
+<type name='INTEGER' template='INT'/>
 <type name='SMALLINT' template='SMALLINT'/>
 <type name='FLOAT' template='FLOAT'/>
 <type name='REAL' template='REAL'/>

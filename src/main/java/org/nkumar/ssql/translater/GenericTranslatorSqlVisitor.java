@@ -71,7 +71,7 @@ public class GenericTranslatorSqlVisitor implements TranslatorSqlVisitor
         typeNames.put(Types.BOOLEAN, "boolean");
         typeNames.put(Types.TINYINT, "tinyint");
         typeNames.put(Types.SMALLINT, "smallint");
-        typeNames.put(Types.INTEGER, "integer");
+        typeNames.put(Types.INTEGER, "int");
         typeNames.put(Types.BIGINT, "bigint");
         typeNames.put(Types.FLOAT, "float");
         typeNames.put(Types.DOUBLE, "double precision");

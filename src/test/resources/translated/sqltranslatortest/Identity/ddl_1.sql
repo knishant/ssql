@@ -2,7 +2,7 @@
 CREATE TABLE ABC
 (
     --col 1 comment
-    COL1                           INTEGER                   NOT NULL,
+    COL1                           INT                       NOT NULL,
     COLS                           SMALLINT                  NOT NULL,
     COLB                           BIGINT                    NOT NULL,
     COL2                           VARCHAR(100),

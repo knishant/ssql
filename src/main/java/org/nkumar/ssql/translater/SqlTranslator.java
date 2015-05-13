@@ -76,7 +76,7 @@ public final class SqlTranslator
         for (String dialectClass : tsvClassNames)
         {
             TranslatorSqlVisitor visitor = createVisitor(dialectClass);
-            File dialectDir = new File(destDir, visitor.getDbName().toLowerCase());
+            File dialectDir = new File(destDir, visitor.getDbName());
             dialectDir.mkdirs();
             File destFile = new File(dialectDir, srcFile.getName());
             String generatedSql = translate(list, visitor);

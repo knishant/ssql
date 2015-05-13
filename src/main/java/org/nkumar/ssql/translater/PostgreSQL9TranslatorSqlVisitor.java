@@ -14,6 +14,7 @@ public final class PostgreSQL9TranslatorSqlVisitor extends GenericTranslatorSqlV
     {
         typeNames.put(Types.BIT, "bool");
         typeNames.put(Types.TINYINT, "smallint");
+        typeNames.put(Types.INTEGER, "integer");
         typeNames.put(Types.FLOAT, "real");
         typeNames.put(Types.VARBINARY, "bytea");
         typeNames.put(Types.BINARY, "bytea");
