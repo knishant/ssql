@@ -49,4 +49,10 @@ public class MySQL5TranslatorSqlVisitor extends GenericTranslatorSqlVisitor
     {
         return false;
     }
+
+    @Override
+    protected boolean needsSpaceAfterDoubleDashComment()
+    {
+        return true;
+    }
 }

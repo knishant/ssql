@@ -1,5 +1,7 @@
+--table level comment
 CREATE TABLE ABC
 (
+    --col 1 comment
     col1 int not null,
     cols smallint not null,
     colb bigint not null,
@@ -7,6 +9,7 @@ CREATE TABLE ABC
     col2n nVARCHAR(100),
     col3 char(1) default 'T',
     col3n nchar(1),
+    --col 3 comment
     col4 date not null,
     col5 TIMESTAMP,
     col6 NUMERIC(10,2),
@@ -18,10 +21,23 @@ CREATE TABLE ABC
     col12 real,
     col13 boolean
 );
-alter table abc add CONSTRAINT abc_pk PRIMARY KEY  (col1);
+--pk comment
 
+alter table abc add CONSTRAINT abc_pk PRIMARY KEY  (col1);
+--uk comment
+--uk, though not really useful
+alter table abc add CONSTRAINT abc_pk UNIQUE  (col1, cols);
+
+--index to be used by FK
 create index ABC_FK1 ON abc (col1b);
 
-alter TABLE abc add CONSTRAINT abc_fk1 foreign KEY (col1b) REFERENCES ANOTHER_TABLE (col1) on delete cascade;
+create table table_234
+(
+    colb bigint not null
+);
+alter table abc add CONSTRAINT table_234_pk PRIMARY KEY  (colb);
+--fk comment
+alter TABLE abc add CONSTRAINT abc_fk1 foreign KEY (colb) REFERENCES table_234 (colb) on delete cascade;
 
+--added in version 10
 alter table abc add column col20 bigint default 0 not null;

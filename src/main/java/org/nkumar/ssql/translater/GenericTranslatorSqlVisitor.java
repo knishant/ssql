@@ -470,14 +470,12 @@ public class GenericTranslatorSqlVisitor implements TranslatorSqlVisitor
     @Override
     public final void visit(Column column)
     {
-        appendComments(column.getComments());
         //TODO identity column
         boolean paddingMode = mode.isModeSet(PADDEDCOLUMN_MODE);
+        String paddingStr = paddingMode ? "    " : "";
+        appendComments(column.getComments(), paddingStr);
+        buffer.append(paddingStr);
         int padding = paddingMode ? 30 : 0;
-        if (paddingMode)
-        {
-            buffer.append("    ");
-        }
         buffer.append(Util.padToSize(getQuotedIdentifier(column.getName()), padding)).append(" ");
         boolean typeSerialized;
         int bufferStartLength = buffer.length();
@@ -505,13 +503,32 @@ public class GenericTranslatorSqlVisitor implements TranslatorSqlVisitor
 
     private void appendComments(Comment[] comments)
     {
+        appendComments(comments, null);
+    }
+
+    private void appendComments(Comment[] comments, String padding)
+    {
         if (comments != null)
         {
             for (Comment comment : comments)
             {
-                buffer.append(comment.getComment()).append("\n");
+                if (padding != null)
+                {
+                    buffer.append(padding);
+                }
+                String commentStr = comment.getComment();
+                if (comment.getKind() == 1 && needsSpaceAfterDoubleDashComment())
+                {
+                    commentStr = commentStr.replaceFirst("--([^ ])","-- $1");
+                }
+                buffer.append(commentStr).append("\n");
             }
         }
+    }
+
+    protected boolean needsSpaceAfterDoubleDashComment()
+    {
+        return false;
     }
 
     @Override

@@ -1,5 +1,7 @@
+--table level comment
 CREATE TABLE ABC
 (
+    --col 1 comment
     COL1                           NUMBER(10,0)              NOT NULL,
     COLS                           NUMBER(5,0)               NOT NULL,
     COLB                           NUMBER(19,0)              NOT NULL,
@@ -7,6 +9,7 @@ CREATE TABLE ABC
     COL2N                          NVARCHAR(100),
     COL3                           CHAR(1 CHAR)              DEFAULT 'T',
     COL3N                          NCHAR(1),
+    --col 3 comment
     COL4                           DATE                      NOT NULL,
     COL5                           TIMESTAMP,
     COL6                           NUMBER(10,2),
@@ -19,11 +22,26 @@ CREATE TABLE ABC
     COL13                          NUMBER(1,0)
 );
 
+--pk comment
 ALTER TABLE ABC ADD CONSTRAINT ABC_PK PRIMARY KEY (COL1);
 
+--uk comment
+--uk, though not really useful
+ALTER TABLE ABC ADD CONSTRAINT ABC_PK UNIQUE (COL1, COLS);
+
+--index to be used by FK
 CREATE INDEX ABC_FK1 ON ABC (COL1B);
 
-ALTER TABLE ABC ADD CONSTRAINT ABC_FK1 FOREIGN KEY (COL1B) REFERENCES ANOTHER_TABLE (COL1) ON DELETE CASCADE;
+CREATE TABLE TABLE_234
+(
+    COLB                           NUMBER(19,0)              NOT NULL
+);
 
+ALTER TABLE ABC ADD CONSTRAINT TABLE_234_PK PRIMARY KEY (COLB);
+
+--fk comment
+ALTER TABLE ABC ADD CONSTRAINT ABC_FK1 FOREIGN KEY (COLB) REFERENCES TABLE_234 (COLB) ON DELETE CASCADE;
+
+--added in version 10
 ALTER TABLE ABC ADD COL20 NUMBER(19,0)  DEFAULT 0 NOT NULL;
 
