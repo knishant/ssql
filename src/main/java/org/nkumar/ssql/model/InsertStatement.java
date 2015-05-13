@@ -7,7 +7,7 @@ import java.util.Map;
 public final class InsertStatement implements DmlStatement
 {
     private String tableName;
-    private final Map<String, Value> columns = new LinkedHashMap<String, Value>();
+    private final Map<String, Value> columns = new LinkedHashMap<>();
 
     public InsertStatement(String tableName)
     {

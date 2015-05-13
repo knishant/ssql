@@ -9,6 +9,7 @@ public class MySQL5TranslatorSqlVisitor extends GenericTranslatorSqlVisitor
         this("MySQL5");
     }
 
+    @SuppressWarnings("MagicNumber")
     protected MySQL5TranslatorSqlVisitor(String dbName)
     {
         super(dbName);

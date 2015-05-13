@@ -2,6 +2,7 @@ package org.nkumar.ssql.model;
 
 public final class PrecisionScaleBean
 {
+    @SuppressWarnings("MagicNumber")
     private int precision = 19;
     private boolean scaleSet;
     private int scale = 2;

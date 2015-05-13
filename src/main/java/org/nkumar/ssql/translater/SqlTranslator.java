@@ -68,6 +68,7 @@ public final class SqlTranslator
         return visitor.getGeneratedSql();
     }
 
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     public static void translateSqlFileToMultipleTranslators(File srcFile, File destDir, String... tsvClassNames)
             throws Exception
     {

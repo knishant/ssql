@@ -38,7 +38,7 @@ public class GenericTranslatorSqlVisitor implements TranslatorSqlVisitor
 {
     private static final String PADDEDCOLUMN_MODE = "paddedcolumn";
 
-    private final StringBuilder buffer = new StringBuilder(8 * 1024);
+    private final StringBuilder buffer = new StringBuilder(8 * 1000);
     private final Mode mode = new Mode();
 
     private final String dbName;
@@ -457,6 +457,7 @@ public class GenericTranslatorSqlVisitor implements TranslatorSqlVisitor
             }
             else
             {
+                //noinspection UseOfSystemOutOrSystemErr
                 System.err.println(dateValueFunction + " is not supported in  " + dbName);
             }
         }
@@ -474,6 +475,7 @@ public class GenericTranslatorSqlVisitor implements TranslatorSqlVisitor
         }
     }
 
+    @SuppressWarnings("MagicNumber")
     @Override
     public final void visit(Column column)
     {

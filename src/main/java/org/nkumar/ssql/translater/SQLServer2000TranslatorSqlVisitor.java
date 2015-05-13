@@ -9,6 +9,7 @@ public class SQLServer2000TranslatorSqlVisitor extends GenericTranslatorSqlVisit
         this("SQLServer2000");
     }
 
+    @SuppressWarnings("MagicNumber")
     protected SQLServer2000TranslatorSqlVisitor(String dbName)
     {
         super(dbName);

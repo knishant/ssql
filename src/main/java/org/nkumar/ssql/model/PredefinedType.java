@@ -4,6 +4,7 @@ public final class PredefinedType implements SqlVisitable
 {
     private final int type;
     private boolean lengthSet;
+    @SuppressWarnings("MagicNumber")
     private long length = 255;
     private boolean precisionScaleSet;
     private PrecisionScaleBean precisionScale = new PrecisionScaleBean();

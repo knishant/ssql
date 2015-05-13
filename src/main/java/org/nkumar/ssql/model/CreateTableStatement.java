@@ -7,8 +7,8 @@ import java.util.Map;
 
 public final class CreateTableStatement extends CreateEntityStatement
 {
-    private final Map<String, Column> columns = new LinkedHashMap<String, Column>();
-    private final List<TableConstraint> tableConstraints = new ArrayList<TableConstraint>();
+    private final Map<String, Column> columns = new LinkedHashMap<>();
+    private final List<TableConstraint> tableConstraints = new ArrayList<>();
 
     public CreateTableStatement(String name)
     {
@@ -17,7 +17,7 @@ public final class CreateTableStatement extends CreateEntityStatement
 
     public List<Column> getColumns()
     {
-        return new ArrayList<Column>(columns.values());
+        return new ArrayList<>(columns.values());
     }
 
     public Column getColumnByName(String name)

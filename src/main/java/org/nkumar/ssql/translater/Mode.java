@@ -5,7 +5,7 @@ import java.util.Map;
 
 final class Mode
 {
-    private final Map<String, Object> modes = new HashMap<String, Object>();
+    private final Map<String, Object> modes = new HashMap<>();
 
     public Object getMode(String key)
     {

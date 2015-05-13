@@ -29,7 +29,7 @@ public final class PlaceHolder implements SqlVisitable
         }
         String content = token.substring(PREFIX.length(), token.length() - SUFFIX.length()).trim();
         String[] dbDetails = content.split("[|]");
-        Map<String, String> map = new LinkedHashMap<String, String>();
+        Map<String, String> map = new LinkedHashMap<>();
         for (String dbDetail : dbDetails)
         {
             dbDetail = dbDetail.trim();
