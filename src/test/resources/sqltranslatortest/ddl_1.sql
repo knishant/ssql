@@ -20,4 +20,8 @@ CREATE TABLE ABC
 );
 alter table abc add CONSTRAINT abc_pk PRIMARY KEY  (col1);
 
+create index ABC_FK1 ON abc (col1b);
+
 alter TABLE abc add CONSTRAINT abc_fk1 foreign KEY (col1b) REFERENCES ANOTHER_TABLE (col1) on delete cascade;
+
+
