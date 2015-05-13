@@ -21,7 +21,7 @@ final class Mode
     {
         modes.remove(key);
     }
-    
+
     public boolean isModeSet(String key)
     {
         return Boolean.TRUE.equals(modes.get(key));

@@ -75,7 +75,7 @@ public final class Util
         char[] buffer = new char[1000];
         int read;
         StringBuilder builder = new StringBuilder(8 * 1000);
-        try(Reader in = new InputStreamReader(new FileInputStream(file), "UTF-8"))
+        try (Reader in = new InputStreamReader(new FileInputStream(file), "UTF-8"))
         {
             while ((read = in.read(buffer)) != -1)
             {
@@ -87,7 +87,7 @@ public final class Util
 
     public static void writeStringToFile(File file, String str) throws IOException
     {
-        try(Writer out = new OutputStreamWriter(new FileOutputStream(file), "UTF-8"))
+        try (Writer out = new OutputStreamWriter(new FileOutputStream(file), "UTF-8"))
         {
             out.write(str);
         }

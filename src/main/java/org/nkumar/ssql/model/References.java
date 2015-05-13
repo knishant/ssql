@@ -12,7 +12,7 @@ public final class References implements SqlVisitable
 
     public References(String tableName, List<String> columnNames, boolean onDeleteCascade)
     {
-        
+
         assert tableName != null;
         this.tableName = tableName;
         assert !Util.isEmptyCollection(columnNames);
