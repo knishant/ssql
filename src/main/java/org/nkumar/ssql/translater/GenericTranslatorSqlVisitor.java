@@ -639,4 +639,13 @@ public class GenericTranslatorSqlVisitor implements TranslatorSqlVisitor
             }
         }
     }
+
+    public final String toXml()
+    {
+        StringBuilder builder = new StringBuilder(1000);
+        builder.append("<mapping dbname='").append(dbName).append("'>\n");
+        builder.append(typeNames.toXml());
+        builder.append("</mapping>\n");
+        return builder.toString();
+    }
 }

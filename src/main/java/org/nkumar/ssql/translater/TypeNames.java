@@ -1,6 +1,9 @@
 package org.nkumar.ssql.translater;
 
+import java.sql.Types;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -63,7 +66,7 @@ public class TypeNames
      * @param scale the SQL scale
      * @param precision the SQL precision
      * @return the associated name with smallest capacity >= size,
-     *         if available and the default type name otherwise
+     * if available and the default type name otherwise
      */
     private String get(int typeCode, long size, int precision, int scale)
     {
@@ -135,9 +138,9 @@ public class TypeNames
 
     /**
      * Get the name of the database type associated with the given
-     * {@link java.sql.Types} typecode with the given storage specification
+     * {@link Types} typecode with the given storage specification
      * parameters.
-     * @param code The {@link java.sql.Types} typecode
+     * @param code The {@link Types} typecode
      * @param length The datatype length
      * @param precision The datatype precision
      * @param scale The datatype scale
@@ -155,6 +158,72 @@ public class TypeNames
         return result;
     }
 
+    public String toXml()
+    {
+        StringBuilder builder = new StringBuilder(1000);
+        builder.append("<types").append(">\n");
+        for (Integer typeCode : TYPE_MAP.keySet())
+        {
+            appendTypeDetails(typeCode, builder);
+        }
+        builder.append("</types>\n");
+        return builder.toString();
+    }
+
+    private void appendTypeDetails(int typeCode, StringBuilder builder)
+    {
+        String typeName = TYPE_MAP.get(typeCode);
+        builder.append("<type name='");
+        builder.append(typeName).append("'");
+        String defaultTemplate = defaults.get(typeCode);
+        if (defaultTemplate != null)
+        {
+            builder.append(" template='").append(defaultTemplate.toUpperCase()).append("'");
+        }
+        Map<Long, String> wMap = weighted.get(typeCode);
+        if (wMap == null)
+        {
+            builder.append("/>\n");
+        }
+        else
+        {
+            builder.append(">\n");
+            for (Map.Entry<Long, String> entry : wMap.entrySet())
+            {
+                builder.append("<weight size='").append(entry.getKey()).append("' template='")
+                        .append(entry.getValue().toUpperCase()).append("'/>\n");
+            }
+            builder.append("</type>\n");
+        }
+    }
+
+    private static final Map<Integer, String> TYPE_MAP;
+
+    static
+    {
+        Map<Integer, String> map = new LinkedHashMap<>();
+        map.put(Types.INTEGER, "INTEGER");
+        map.put(Types.SMALLINT, "SMALLINT");
+        map.put(Types.FLOAT, "FLOAT");
+        map.put(Types.REAL, "REAL");
+        map.put(Types.DOUBLE, "DOUBLE");
+        map.put(Types.NUMERIC, "NUMERIC");
+        map.put(Types.BIT, "BIT");
+        map.put(Types.BOOLEAN, "BOOLEAN");
+        map.put(Types.CHAR, "CHAR");
+        map.put(Types.VARCHAR, "VARCHAR");
+        map.put(Types.CLOB, "CLOB");
+        map.put(Types.NCHAR, "NCHAR");
+        map.put(Types.NVARCHAR, "NVARCHAR");
+        map.put(Types.NCLOB, "NCLOB");
+        map.put(Types.DATE, "DATE");
+        map.put(Types.TIME, "TIME");
+        map.put(Types.TIMESTAMP, "TIMESTAMP");
+        map.put(Types.BINARY, "BINARY");
+        map.put(Types.VARBINARY, "VARBINARY");
+        map.put(Types.BLOB, "BLOB");
+        TYPE_MAP = Collections.unmodifiableMap(map);
+    }
 }
 
 

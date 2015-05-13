@@ -2,16 +2,20 @@ package org.nkumar.ssql.translator;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.nkumar.ssql.translater.GenericTranslatorSqlVisitor;
 import org.nkumar.ssql.translater.HSQL2TranslatorSqlVisitor;
 import org.nkumar.ssql.translater.IdentityTranslatorSqlVisitor;
 import org.nkumar.ssql.translater.MySQL5TranslatorSqlVisitor;
 import org.nkumar.ssql.translater.Oracle9iTranslatorSqlVisitor;
 import org.nkumar.ssql.translater.PostgreSQL9TranslatorSqlVisitor;
 import org.nkumar.ssql.translater.SQLServer2005TranslatorSqlVisitor;
+import org.nkumar.ssql.translater.SQLServer2008TranslatorSqlVisitor;
 import org.nkumar.ssql.translater.SqlTranslator;
 import org.nkumar.ssql.util.TUtil;
 
 import java.io.File;
+import java.io.FileWriter;
+import java.util.Arrays;
 
 public final class SqlTranslatorTest
 {
@@ -24,6 +28,28 @@ public final class SqlTranslatorTest
     {
         TUtil.deleteFile(BASE_TRANS_DIR);
         BASE_TRANS_DIR.mkdirs();
+    }
+
+    @Test
+    public void testTypeMappings() throws Exception
+    {
+        String[] dbNames = new String[]{"Oracle9i", "PostgreSQL9", "SQLServer2005", "MySQL5", "SQLServer2008"};
+        Arrays.sort(dbNames);
+        StringBuilder builder = new StringBuilder(10 * 1024);
+        builder.append("<mappings>\n");
+        for (String dbName : dbNames)
+        {
+            String translatorName = getTranslatorName(dbName);
+            GenericTranslatorSqlVisitor translator =
+                    (GenericTranslatorSqlVisitor) Class.forName(translatorName).newInstance();
+            builder.append(translator.toXml());
+        }
+        builder.append("</mappings>\n");
+        File actualFile = new File(BASE_TRANS_DIR, "../typemapping.xml");
+        FileWriter out = new FileWriter(actualFile);
+        out.write(builder.toString());
+        out.close();
+        TUtil.assertSameContent(new File(BASE_EXP_DIR, "../typemapping.xml"), actualFile);
     }
 
     @Test
@@ -72,8 +98,11 @@ public final class SqlTranslatorTest
                 return HSQL2TranslatorSqlVisitor.class.getName();
             case "SQLServer2005":
                 return SQLServer2005TranslatorSqlVisitor.class.getName();
+            case "SQLServer2008":
+                return SQLServer2008TranslatorSqlVisitor.class.getName();
             default:
                 throw new AssertionError(dbName + " not supported");
         }
     }
+
 }
