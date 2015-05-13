@@ -1,4 +1,4 @@
-package org.nkumar.ssql.translater;
+package org.nkumar.ssql.translator;
 
 import java.sql.Types;
 import java.util.Collections;

@@ -1,4 +1,4 @@
-package org.nkumar.ssql.translater;
+package org.nkumar.ssql.translator;
 
 
 import org.nkumar.ssql.dialect.Dialect;

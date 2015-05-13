@@ -9,7 +9,6 @@ import org.nkumar.ssql.dialect.Oracle9iDialect;
 import org.nkumar.ssql.dialect.PostgreSQL9Dialect;
 import org.nkumar.ssql.dialect.SQLServer2005Dialect;
 import org.nkumar.ssql.dialect.SQLServer2008Dialect;
-import org.nkumar.ssql.translater.SqlTranslator;
 import org.nkumar.ssql.util.TUtil;
 
 import java.io.File;

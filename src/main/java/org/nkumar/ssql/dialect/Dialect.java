@@ -1,6 +1,6 @@
 package org.nkumar.ssql.dialect;
 
-import org.nkumar.ssql.translater.TypeNames;
+import org.nkumar.ssql.translator.TypeNames;
 
 import java.sql.Types;
 import java.util.Map;
