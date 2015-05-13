@@ -28,11 +28,11 @@ import org.nkumar.ssql.model.Value;
 import org.nkumar.ssql.util.Util;
 
 import java.sql.Types;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
+import java.util.TreeSet;
 
 public class GenericTranslatorSqlVisitor implements TranslatorSqlVisitor
 {
@@ -45,9 +45,9 @@ public class GenericTranslatorSqlVisitor implements TranslatorSqlVisitor
 
     protected final TypeNames typeNames = new TypeNames();
 
-    protected final Map<String, String> functions = new HashMap<String, String>();
+    protected final Map<String, String> functions = new TreeMap<>();
 
-    private final Set<String> keywords = new HashSet<String>();
+    private final Set<String> keywords = new TreeSet<>();
 
     protected final CaseHandler caseHandler = CaseHandler.Factory.create(CaseHandler.Factory.UPPER);
 
@@ -646,6 +646,26 @@ public class GenericTranslatorSqlVisitor implements TranslatorSqlVisitor
         builder.append("<mapping dbname='").append(dbName).append("'>\n");
         builder.append(typeNames.toXml());
         builder.append("</mapping>\n");
+        if (!keywords.isEmpty())
+        {
+            builder.append("<keywords>\n");
+            for (String keyword : keywords)
+            {
+                builder.append("<keyword value='").append(keyword.toUpperCase()).append("'/>\n");
+            }
+            builder.append("</keywords>\n");
+        }
+        if (!functions.isEmpty())
+        {
+            builder.append("<functions>\n");
+            for (Map.Entry<String, String> entry : functions.entrySet())
+            {
+                builder.append("<function name='")
+                        .append(entry.getKey().toUpperCase()).append("' mapping='")
+                        .append(entry.getValue().toUpperCase()).append("'/>\n");
+            }
+            builder.append("</functions>\n");
+        }
         return builder.toString();
     }
 }
