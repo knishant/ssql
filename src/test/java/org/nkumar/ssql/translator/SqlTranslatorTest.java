@@ -2,13 +2,13 @@ package org.nkumar.ssql.translator;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.nkumar.ssql.translater.Dialect;
-import org.nkumar.ssql.translater.IdentityDialect;
-import org.nkumar.ssql.translater.MySQL5InnoDBDialect;
-import org.nkumar.ssql.translater.Oracle9iDialect;
-import org.nkumar.ssql.translater.PostgreSQL9Dialect;
-import org.nkumar.ssql.translater.SQLServer2005Dialect;
-import org.nkumar.ssql.translater.SQLServer2008Dialect;
+import org.nkumar.ssql.dialect.Dialect;
+import org.nkumar.ssql.dialect.IdentityDialect;
+import org.nkumar.ssql.dialect.MySQL5InnoDBDialect;
+import org.nkumar.ssql.dialect.Oracle9iDialect;
+import org.nkumar.ssql.dialect.PostgreSQL9Dialect;
+import org.nkumar.ssql.dialect.SQLServer2005Dialect;
+import org.nkumar.ssql.dialect.SQLServer2008Dialect;
 import org.nkumar.ssql.translater.SqlTranslator;
 import org.nkumar.ssql.util.TUtil;
 

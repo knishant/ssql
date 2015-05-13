@@ -1,6 +1,7 @@
 package org.nkumar.ssql.translater;
 
 
+import org.nkumar.ssql.dialect.Dialect;
 import org.nkumar.ssql.model.ADColumn;
 import org.nkumar.ssql.model.AddColumnStatement;
 import org.nkumar.ssql.model.AddTableConstraintStatement;

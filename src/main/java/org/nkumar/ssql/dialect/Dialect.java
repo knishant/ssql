@@ -1,4 +1,6 @@
-package org.nkumar.ssql.translater;
+package org.nkumar.ssql.dialect;
+
+import org.nkumar.ssql.translater.TypeNames;
 
 import java.sql.Types;
 import java.util.Map;
@@ -68,7 +70,7 @@ public class Dialect
         return str != null && keywords.contains(str.toLowerCase());
     }
 
-    protected String getAddColumnString()
+    public String getAddColumnString()
     {
         return "add column";
     }

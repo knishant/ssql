@@ -1,5 +1,6 @@
 package org.nkumar.ssql.translater;
 
+import org.nkumar.ssql.dialect.Dialect;
 import org.nkumar.ssql.model.SqlVisitable;
 import org.nkumar.ssql.translator.SqlParser;
 import org.nkumar.ssql.util.Util;
