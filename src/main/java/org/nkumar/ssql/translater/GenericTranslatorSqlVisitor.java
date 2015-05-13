@@ -95,19 +95,19 @@ public class GenericTranslatorSqlVisitor implements TranslatorSqlVisitor
     }
 
     @Override
-    public String getGeneratedSql()
+    public final String getGeneratedSql()
     {
         return buffer.toString();
     }
 
     @Override
-    public void clearBuffer()
+    public final void clearBuffer()
     {
         this.buffer.setLength(0);
     }
 
     @Override
-    public String getDbName()
+    public final String getDbName()
     {
         return dbName;
     }
@@ -231,7 +231,7 @@ public class GenericTranslatorSqlVisitor implements TranslatorSqlVisitor
         return false;
     }
 
-    protected String getDropSequenceString(String sequenceName)
+    private String getDropSequenceString(String sequenceName)
     {
         assert supportsSequences();
         return caseHandler.transform("drop sequence ") + getQuotedIdentifier(sequenceName);
@@ -615,7 +615,7 @@ public class GenericTranslatorSqlVisitor implements TranslatorSqlVisitor
         return '"';
     }
 
-    protected void addKeywords(String... strs)
+    protected final void addKeywords(String... strs)
     {
         for (String str : strs)
         {
@@ -623,12 +623,12 @@ public class GenericTranslatorSqlVisitor implements TranslatorSqlVisitor
         }
     }
 
-    protected boolean isKeyword(String str)
+    private boolean isKeyword(String str)
     {
         return str != null && keywords.contains(str.toLowerCase());
     }
 
-    protected String getQuotedIdentifier(String identifier)
+    private String getQuotedIdentifier(String identifier)
     {
         identifier = caseHandler.transform(identifier);
         boolean keyword = isKeyword(identifier);
