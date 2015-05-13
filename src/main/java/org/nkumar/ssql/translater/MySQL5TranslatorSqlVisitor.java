@@ -12,6 +12,7 @@ public class MySQL5TranslatorSqlVisitor extends GenericTranslatorSqlVisitor
     protected MySQL5TranslatorSqlVisitor(String dbName)
     {
         super(dbName);
+        typeNames.put(Types.BOOLEAN, "bit");
         typeNames.put(Types.TIMESTAMP, "datetime");
         typeNames.put(Types.VARBINARY, "longblob");
         typeNames.put(Types.VARBINARY, 16777215, "mediumblob");
