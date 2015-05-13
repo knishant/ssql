@@ -2,17 +2,12 @@ package org.nkumar.ssql.translater;
 
 import java.sql.Types;
 
-public class MySQL5TranslatorSqlVisitor extends GenericTranslatorSqlVisitor
+public class MySQL5InnoDBTranslatorSqlVisitor extends GenericTranslatorSqlVisitor
 {
-    public MySQL5TranslatorSqlVisitor()
-    {
-        this("MySQL5");
-    }
-
     @SuppressWarnings("MagicNumber")
-    protected MySQL5TranslatorSqlVisitor(String dbName)
+    public MySQL5InnoDBTranslatorSqlVisitor()
     {
-        super(dbName);
+        super("MySQL5InnoDB");
         typeNames.put(Types.BOOLEAN, "bit");
         typeNames.put(Types.TIMESTAMP, "datetime");
         typeNames.put(Types.VARBINARY, "longblob");
@@ -46,14 +41,14 @@ public class MySQL5TranslatorSqlVisitor extends GenericTranslatorSqlVisitor
     }
 
     @Override
-    public boolean supportsCascadeDelete()
-    {
-        return false;
-    }
-
-    @Override
     protected boolean needsSpaceAfterDoubleDashComment()
     {
         return true;
+    }
+
+    @Override
+    protected String getTableTypeString()
+    {
+        return " ENGINE=InnoDB";
     }
 }

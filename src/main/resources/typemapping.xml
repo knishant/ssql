@@ -1,5 +1,5 @@
 <mappings>
-<mapping dbname='MySQL5'>
+<mapping dbname='MySQL5InnoDB'>
 <types>
 <type name='INTEGER' template='INT'/>
 <type name='SMALLINT' template='SMALLINT'/>

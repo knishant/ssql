@@ -183,6 +183,11 @@ public class GenericTranslatorSqlVisitor implements TranslatorSqlVisitor
         buffer.append(")");
     }
 
+    protected String getTableTypeString()
+    {
+        return "";
+    }
+
     @Override
     public final void visit(References references)
     {
@@ -192,20 +197,8 @@ public class GenericTranslatorSqlVisitor implements TranslatorSqlVisitor
         buffer.append(")");
         if (references.isOnDeleteCascade())
         {
-            if (supportsCascadeDelete())
-            {
-                buffer.append(caseHandler.transform(" on delete cascade"));
-            }
-            else
-            {
-                buffer.append(caseHandler.transform(" /*on delete cascade*/"));
-            }
+            buffer.append(caseHandler.transform(" on delete cascade"));
         }
-    }
-
-    protected boolean supportsCascadeDelete()
-    {
-        return true;
     }
 
     @Override
@@ -309,6 +302,10 @@ public class GenericTranslatorSqlVisitor implements TranslatorSqlVisitor
         appendSpaceIfNecessary();
         appendPlaceHolder(statement.getClosingPlaceHolder());
         trimRight();
+        if (statement instanceof CreateTableStatement)
+        {
+            buffer.append(getTableTypeString());
+        }
         terminateStatement();
     }
 

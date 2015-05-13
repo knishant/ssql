@@ -4,7 +4,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.nkumar.ssql.translater.GenericTranslatorSqlVisitor;
 import org.nkumar.ssql.translater.IdentityTranslatorSqlVisitor;
-import org.nkumar.ssql.translater.MySQL5TranslatorSqlVisitor;
+import org.nkumar.ssql.translater.MySQL5InnoDBTranslatorSqlVisitor;
 import org.nkumar.ssql.translater.Oracle9iTranslatorSqlVisitor;
 import org.nkumar.ssql.translater.PostgreSQL9TranslatorSqlVisitor;
 import org.nkumar.ssql.translater.SQLServer2005TranslatorSqlVisitor;
@@ -32,7 +32,7 @@ public final class SqlTranslatorTest
     @Test
     public void testTypeMappings() throws Exception
     {
-        String[] dbNames = new String[]{"MySQL5", "Oracle9i", "PostgreSQL9", "SQLServer2005", "SQLServer2008"};
+        String[] dbNames = new String[]{"MySQL5InnoDB", "Oracle9i", "PostgreSQL9", "SQLServer2005", "SQLServer2008"};
         Arrays.sort(dbNames);
         StringBuilder builder = new StringBuilder(10 * 1024);
         builder.append("<mappings>\n");
@@ -54,20 +54,20 @@ public final class SqlTranslatorTest
     @Test
     public void translateDDL1() throws Exception
     {
-        assertCorrectTranslation("ddl_1.sql", "Identity", "MySQL5","Oracle9i", "PostgreSQL9", "SQLServer2005");
+        assertCorrectTranslation("ddl_1.sql", "Identity", "MySQL5InnoDB", "Oracle9i", "PostgreSQL9", "SQLServer2005");
     }
 
     @Test
     public void translateSpringBatchDDL() throws Exception
     {
-        assertCorrectTranslation("spring_batch.sql", "Identity", "MySQL5","Oracle9i", "PostgreSQL9", "SQLServer2005");
-        assertCorrectTranslation("spring_batch_drop.sql", "Identity", "MySQL5","Oracle9i", "PostgreSQL9", "SQLServer2005");
+        assertCorrectTranslation("spring_batch.sql", "Identity", "MySQL5InnoDB","Oracle9i", "PostgreSQL9", "SQLServer2005");
+        assertCorrectTranslation("spring_batch_drop.sql", "Identity", "MySQL5InnoDB","Oracle9i", "PostgreSQL9", "SQLServer2005");
     }
 
     @Test
     public void translateQuartzDDL() throws Exception
     {
-        assertCorrectTranslation("quartz.sql", "Identity", "MySQL5","Oracle9i", "PostgreSQL9", "SQLServer2005");
+        assertCorrectTranslation("quartz.sql", "Identity", "MySQL5InnoDB","Oracle9i", "PostgreSQL9", "SQLServer2005");
     }
 
     private static void assertCorrectTranslation(String sqlFileName, String... dbnames) throws Exception
@@ -104,8 +104,8 @@ public final class SqlTranslatorTest
                 return Oracle9iTranslatorSqlVisitor.class.getName();
             case "PostgreSQL9":
                 return PostgreSQL9TranslatorSqlVisitor.class.getName();
-            case "MySQL5":
-                return MySQL5TranslatorSqlVisitor.class.getName();
+            case "MySQL5InnoDB":
+                return MySQL5InnoDBTranslatorSqlVisitor.class.getName();
             case "SQLServer2005":
                 return SQLServer2005TranslatorSqlVisitor.class.getName();
             case "SQLServer2008":
