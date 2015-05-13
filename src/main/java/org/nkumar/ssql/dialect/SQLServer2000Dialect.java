@@ -17,7 +17,7 @@ public class SQLServer2000Dialect extends Dialect
         typeNames.put(Types.BIT, "tinyint");
         typeNames.put(Types.BOOLEAN, "bit");
         typeNames.put(Types.BIGINT, "numeric(19,0)");
-        typeNames.put(Types.TINYINT, "smallint");
+//        typeNames.put(Types.TINYINT, "smallint");
         typeNames.put(Types.DATE, "datetime");
         typeNames.put(Types.TIME, "datetime");
         typeNames.put(Types.TIMESTAMP, "datetime");

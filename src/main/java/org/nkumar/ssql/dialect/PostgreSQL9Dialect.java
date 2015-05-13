@@ -13,7 +13,7 @@ public class PostgreSQL9Dialect extends Dialect
     {
         super(dbName);
         typeNames.put(Types.BIT, "bool");
-        typeNames.put(Types.TINYINT, "smallint");
+//        typeNames.put(Types.TINYINT, "smallint");
         typeNames.put(Types.INTEGER, "integer");
         typeNames.put(Types.FLOAT, "real");
         typeNames.put(Types.VARBINARY, "bytea");

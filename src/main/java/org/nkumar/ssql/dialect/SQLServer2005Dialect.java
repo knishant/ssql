@@ -15,7 +15,7 @@ public class SQLServer2005Dialect extends Dialect
         super(dbName);
         typeNames.put(Types.BINARY, "binary($l)");
         typeNames.put(Types.BOOLEAN, "bit");
-        typeNames.put(Types.TINYINT, "smallint");
+//        typeNames.put(Types.TINYINT, "smallint");
         typeNames.put(Types.DATE, "datetime");
         typeNames.put(Types.TIME, "datetime");
         typeNames.put(Types.TIMESTAMP, "datetime");

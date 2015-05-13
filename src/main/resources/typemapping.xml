@@ -3,6 +3,7 @@
 <types>
 <type name='INTEGER' template='INT'/>
 <type name='SMALLINT' template='SMALLINT'/>
+<type name='BIGINT' template='BIGINT'/>
 <type name='FLOAT' template='FLOAT'/>
 <type name='REAL' template='REAL'/>
 <type name='DOUBLE' template='DOUBLE PRECISION'/>
@@ -38,6 +39,7 @@
 <types>
 <type name='INTEGER' template='NUMBER(10,0)'/>
 <type name='SMALLINT' template='NUMBER(5,0)'/>
+<type name='BIGINT' template='NUMBER(19,0)'/>
 <type name='FLOAT' template='FLOAT'/>
 <type name='REAL' template='REAL'/>
 <type name='DOUBLE' template='DOUBLE PRECISION'/>
@@ -73,6 +75,7 @@
 <types>
 <type name='INTEGER' template='INTEGER'/>
 <type name='SMALLINT' template='SMALLINT'/>
+<type name='BIGINT' template='BIGINT'/>
 <type name='FLOAT' template='REAL'/>
 <type name='REAL' template='REAL'/>
 <type name='DOUBLE' template='DOUBLE PRECISION'/>
@@ -102,6 +105,7 @@
 <types>
 <type name='INTEGER' template='INT'/>
 <type name='SMALLINT' template='SMALLINT'/>
+<type name='BIGINT' template='BIGINT'/>
 <type name='FLOAT' template='FLOAT'/>
 <type name='REAL' template='REAL'/>
 <type name='DOUBLE' template='DOUBLE PRECISION'/>
@@ -136,6 +140,7 @@
 <types>
 <type name='INTEGER' template='INT'/>
 <type name='SMALLINT' template='SMALLINT'/>
+<type name='BIGINT' template='BIGINT'/>
 <type name='FLOAT' template='FLOAT'/>
 <type name='REAL' template='REAL'/>
 <type name='DOUBLE' template='DOUBLE PRECISION'/>

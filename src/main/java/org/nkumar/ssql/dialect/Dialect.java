@@ -23,7 +23,7 @@ public class Dialect
         this.dbName = dbName;
         typeNames.put(Types.BIT, "bit");
         typeNames.put(Types.BOOLEAN, "boolean");
-        typeNames.put(Types.TINYINT, "tinyint");
+//        typeNames.put(Types.TINYINT, "tinyint");
         typeNames.put(Types.SMALLINT, "smallint");
         typeNames.put(Types.INTEGER, "int");
         typeNames.put(Types.BIGINT, "bigint");

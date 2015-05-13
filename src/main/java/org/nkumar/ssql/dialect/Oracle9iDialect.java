@@ -19,7 +19,7 @@ public class Oracle9iDialect extends Dialect
         typeNames.put(Types.BIT, "number(1,0)");
         typeNames.put(Types.BIGINT, "number(19,0)");
         typeNames.put(Types.SMALLINT, "number(5,0)");
-        typeNames.put(Types.TINYINT, "number(3,0)");
+//        typeNames.put(Types.TINYINT, "number(3,0)");
         typeNames.put(Types.INTEGER, "number(10,0)");
 
         typeNames.put(Types.NUMERIC, "number($p,$s)");

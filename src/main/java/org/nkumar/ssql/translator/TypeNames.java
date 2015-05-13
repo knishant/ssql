@@ -98,6 +98,7 @@ public class TypeNames
      */
     public void put(int typecode, long capacity, String value)
     {
+        validateTypecode(typecode);
         Map<Long, String> map = weighted.get(typecode);
         if (map == null)
         {// add new ordered map
@@ -113,7 +114,16 @@ public class TypeNames
      */
     public void put(int typecode, String value)
     {
+        validateTypecode(typecode);
         defaults.put(typecode, value.toLowerCase());
+    }
+
+    private static void validateTypecode(int typecode)
+    {
+        if (!TYPE_MAP.containsKey(typecode))
+        {
+            throw new IllegalArgumentException(typecode + " not supported");
+        }
     }
 
     private static String replaceOnce(String template, String placeholder, String replacement)
@@ -204,6 +214,7 @@ public class TypeNames
         Map<Integer, String> map = new LinkedHashMap<>();
         map.put(Types.INTEGER, "INTEGER");
         map.put(Types.SMALLINT, "SMALLINT");
+        map.put(Types.BIGINT, "BIGINT");
         map.put(Types.FLOAT, "FLOAT");
         map.put(Types.REAL, "REAL");
         map.put(Types.DOUBLE, "DOUBLE");
