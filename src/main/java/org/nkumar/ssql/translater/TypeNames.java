@@ -38,15 +38,15 @@ import java.util.TreeMap;
 public class TypeNames
 {
 
-    private final Map<Integer, Map<Long, String>> weighted = new HashMap<Integer, Map<Long, String>>();
-    private final Map<Integer, String> defaults = new HashMap<Integer, String>();
+    private final Map<Integer, Map<Long, String>> weighted = new HashMap<>();
+    private final Map<Integer, String> defaults = new HashMap<>();
 
     /**
      * get default type name for specified type
      * @param typecode the type key
      * @return the default type name associated with specified key
      */
-    public String get(int typecode)
+    public String getTypeName(int typecode)
     {
         String result = defaults.get(typecode);
         if (result == null)
@@ -65,7 +65,7 @@ public class TypeNames
      * @return the associated name with smallest capacity >= size,
      *         if available and the default type name otherwise
      */
-    public String get(int typeCode, long size, int precision, int scale)
+    private String get(int typeCode, long size, int precision, int scale)
     {
         Map<Long, String> map = weighted.get(typeCode);
         if (map != null && !map.isEmpty())
@@ -79,7 +79,7 @@ public class TypeNames
                 }
             }
         }
-        return replace(get(typeCode), size, precision, scale);
+        return replace(getTypeName(typeCode), size, precision, scale);
     }
 
     private static String replace(String type, long size, int precision, int scale)
@@ -98,7 +98,7 @@ public class TypeNames
         Map<Long, String> map = weighted.get(typecode);
         if (map == null)
         {// add new ordered map
-            map = new TreeMap<Long, String>();
+            map = new TreeMap<>();
             weighted.put(typecode, map);
         }
         map.put(capacity, value);
@@ -117,7 +117,7 @@ public class TypeNames
     {
         if (template == null)
         {
-            return template; // returnign null!
+            return null;
         }
         int loc = template.indexOf(placeholder);
         if (loc < 0)
@@ -135,23 +135,6 @@ public class TypeNames
 
     /**
      * Get the name of the database type associated with the given
-     * {@link java.sql.Types} typecode.
-     * @param code The {@link java.sql.Types} typecode
-     * @return the database type name
-     * @throws org.hibernate.HibernateException If no mapping was specified for that type.
-     */
-    public String getTypeName(int code)
-    {
-        String result = get(code);
-        if (result == null)
-        {
-            throw new RuntimeException("No default type mapping for (java.sql.Types) " + code);
-        }
-        return result;
-    }
-
-    /**
-     * Get the name of the database type associated with the given
      * {@link java.sql.Types} typecode with the given storage specification
      * parameters.
      * @param code The {@link java.sql.Types} typecode
@@ -159,7 +142,7 @@ public class TypeNames
      * @param precision The datatype precision
      * @param scale The datatype scale
      * @return the database type name
-     * @throws HibernateException If no mapping was specified for that type.
+     * @throws RuntimeException If no mapping was specified for that type.
      */
     public String getTypeName(int code, long length, int precision, int scale)
     {
