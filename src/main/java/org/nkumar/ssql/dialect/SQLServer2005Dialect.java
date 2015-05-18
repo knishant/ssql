@@ -25,6 +25,9 @@ public class SQLServer2005Dialect extends Dialect
         typeNames.put(Types.VARBINARY, "varbinary(MAX)");
         typeNames.put(Types.VARBINARY, 8000, "varbinary($l)");
 
+        typeNames.put(Types.VARCHAR, "varchar(MAX)");
+        typeNames.put(Types.VARCHAR, 8000, "varchar($l)");
+
         functions.put("current_date", "getdate()");
         functions.put("current_time", "getdate()");
         functions.put("current_timestamp", "getdate()");

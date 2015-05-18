@@ -113,7 +113,9 @@
 <type name='BIT' template='BIT'/>
 <type name='BOOLEAN' template='BIT'/>
 <type name='CHAR' template='CHAR($L)'/>
-<type name='VARCHAR' template='VARCHAR($L)'/>
+<type name='VARCHAR' template='VARCHAR(MAX)'>
+<weight size='8000' template='VARCHAR($L)'/>
+</type>
 <type name='CLOB' template='VARCHAR(MAX)'/>
 <type name='NCHAR' template='NCHAR($L)'/>
 <type name='NVARCHAR' template='NVARCHAR($L)'/>
@@ -148,7 +150,9 @@
 <type name='BIT' template='BIT'/>
 <type name='BOOLEAN' template='BIT'/>
 <type name='CHAR' template='CHAR($L)'/>
-<type name='VARCHAR' template='VARCHAR($L)'/>
+<type name='VARCHAR' template='VARCHAR(MAX)'>
+<weight size='8000' template='VARCHAR($L)'/>
+</type>
 <type name='CLOB' template='VARCHAR(MAX)'/>
 <type name='NCHAR' template='NCHAR($L)'/>
 <type name='NVARCHAR' template='NVARCHAR($L)'/>
