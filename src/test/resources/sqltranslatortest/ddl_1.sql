@@ -55,3 +55,16 @@ create table date_def
     constraint date_def_pk primary key  (col_pk),
     constraint date_def_fk foreign key (col1) references ABC (col4) on delete cascade
 );
+
+create table varchar_limit
+(
+    col1    varchar(1),
+    col10 varchar(10),
+    col255 varchar(255),
+    col4000 varchar(4000),
+    col4100 varchar(4100),
+    col8000 varchar(8000),
+    col8100 varchar(8100),
+    col65535 varchar(65535),
+    col66000 varchar(66000)
+);

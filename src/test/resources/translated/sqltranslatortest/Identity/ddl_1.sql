@@ -59,3 +59,16 @@ CREATE TABLE DATE_DEF
     CONSTRAINT DATE_DEF_FK FOREIGN KEY (COL1) REFERENCES ABC (COL4) ON DELETE CASCADE
 );
 
+CREATE TABLE VARCHAR_LIMIT
+(
+    COL1                           VARCHAR(1),
+    COL10                          VARCHAR(10),
+    COL255                         VARCHAR(255),
+    COL4000                        VARCHAR(4000),
+    COL4100                        VARCHAR(4100),
+    COL8000                        VARCHAR(8000),
+    COL8100                        VARCHAR(8100),
+    COL65535                       VARCHAR(65535),
+    COL66000                       VARCHAR(66000)
+);
+
