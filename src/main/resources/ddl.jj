@@ -253,10 +253,10 @@ void TableElement(CreateTableStatement table) :
 }
 {
     (
-        LOOKAHEAD(2)
+        //LOOKAHEAD(2)
 	    col = ColumnDefinition()            {table.addColumn(col);}
     |
-        tc = TableConstraintDefinition()    {table.addTableConstraint(tc);}
+        <K_CONSTRAINT> tc = TableConstraintDefinition()    {table.addTableConstraint(tc);}
     )
 }
 

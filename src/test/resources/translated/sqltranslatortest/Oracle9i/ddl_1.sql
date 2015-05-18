@@ -51,8 +51,10 @@ ALTER TABLE ABC ADD COL20 NUMBER(19,0)  DEFAULT 0 NOT NULL;
 
 CREATE TABLE DATE_DEF
 (
+    COL_PK                         NUMBER(10,0)              NOT NULL,
     COL1                           DATE                      DEFAULT CURRENT_DATE,
     COL2                           DATE                      DEFAULT CURRENT_TIMESTAMP,
-    COL3                           TIMESTAMP                 DEFAULT CURRENT_TIMESTAMP
+    COL3                           TIMESTAMP                 DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT DATE_DEF_PK PRIMARY KEY (COL_PK)
 );
 

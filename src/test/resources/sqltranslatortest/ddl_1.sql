@@ -48,7 +48,10 @@ alter table abc add column col20 bigint default 0 not null;
 
 create table date_def
 (
+    col_pk int not null,
     col1 date DEFAULT CURRENT_DATE,
     col2 time DEFAULT CURRENT_TIME,
-    col3 timestamp default current_timestamp
+    col3 timestamp default current_timestamp,
+    constraint date_def_pk primary key  (col_pk),
+    constraint date_def_fk foreign key (col1) references ABC (col4) on delete cascade
 );

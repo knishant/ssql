@@ -470,6 +470,8 @@ public final class GenericTranslatorSqlVisitor implements TranslatorSqlVisitor
             {
                 TableConstraint tc = iterator.next();
                 buffer.append("    ");
+                buffer.append(caseHandler.transform("constraint"));
+                buffer.append(" ");
                 tc.accept(this);
                 if (iterator.hasNext())
                 {

@@ -51,8 +51,11 @@ ALTER TABLE ABC ADD COLUMN COL20 BIGINT  DEFAULT 0 NOT NULL;
 
 CREATE TABLE DATE_DEF
 (
+    COL_PK                         INT                       NOT NULL,
     COL1                           DATETIME                  DEFAULT GETDATE(),
     COL2                           DATETIME                  DEFAULT GETDATE(),
-    COL3                           DATETIME                  DEFAULT GETDATE()
+    COL3                           DATETIME                  DEFAULT GETDATE(),
+    CONSTRAINT DATE_DEF_PK PRIMARY KEY (COL_PK),
+    CONSTRAINT DATE_DEF_FK FOREIGN KEY (COL1) REFERENCES ABC (COL4) ON DELETE CASCADE
 );
 
