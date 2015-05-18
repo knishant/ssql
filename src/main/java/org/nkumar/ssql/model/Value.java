@@ -1,5 +1,7 @@
 package org.nkumar.ssql.model;
 
+import java.math.BigDecimal;
+
 public final class Value implements SqlVisitable
 {
     private Number numberValue;
@@ -25,7 +27,7 @@ public final class Value implements SqlVisitable
         }
         catch (NumberFormatException ignore)
         {
-            this.numberValue = new Double(numberValue);
+            this.numberValue = new BigDecimal(numberValue);
         }
     }
 

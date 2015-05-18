@@ -5,8 +5,8 @@ CREATE TABLE ABC
     col1 int not null,
     cols smallint default -1 not null,
     colb bigint default 123 not null,
-    col2 VARCHAR(100),
-    col2n nVARCHAR(100),
+    col2 VARCHAR(100) default 'empty',
+    col2n nVARCHAR(100) DEFAULT null,
     --col 3 comment
     col3 char(1) default 'T',
     col3n nchar(1),

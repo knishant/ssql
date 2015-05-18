@@ -5,8 +5,8 @@ CREATE TABLE ABC
     COL1                           INTEGER                   NOT NULL,
     COLS                           SMALLINT                  DEFAULT -1 NOT NULL,
     COLB                           BIGINT                    DEFAULT 123 NOT NULL,
-    COL2                           VARCHAR(100),
-    COL2N                          VARCHAR(100),
+    COL2                           VARCHAR(100)              DEFAULT 'empty',
+    COL2N                          VARCHAR(100)              DEFAULT NULL,
     --col 3 comment
     COL3                           CHAR(1)                   DEFAULT 'T',
     COL3N                          CHAR(1),
