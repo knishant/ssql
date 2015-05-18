@@ -37,7 +37,7 @@ public final class SqlTranslatorTest
         builder.append("<mappings>\n");
         for (String dbName : dbNames)
         {
-            String dialectName = getDialectName(dbName);
+            String dialectName = getDialectClassName(dbName);
             Dialect dialect = (Dialect) Class.forName(dialectName).newInstance();
             builder.append(dialect.toXml());
         }
@@ -71,7 +71,7 @@ public final class SqlTranslatorTest
     private static void assertCorrectTranslation(String sqlFileName, String... dbnames) throws Exception
     {
         File srcFile = new File(BASE_RSRC_DIR, "sqltranslatortest/" + sqlFileName);
-        String[] translatorNames = getDialectNames(dbnames);
+        String[] translatorNames = getDialectClassNames(dbnames);
         SqlTranslator.translateSqlFileToMultipleTranslators(srcFile, BASE_TRANS_DIR, translatorNames);
         for (String dbname : dbnames)
         {
@@ -82,17 +82,17 @@ public final class SqlTranslatorTest
         }
     }
 
-    private static String[] getDialectNames(String... dbNames)
+    private static String[] getDialectClassNames(String... dbNames)
     {
         String[] names = new String[dbNames.length];
         for (int i = 0; i < dbNames.length; i++)
         {
-            names[i] = getDialectName(dbNames[i]);
+            names[i] = getDialectClassName(dbNames[i]);
         }
         return names;
     }
 
-    private static String getDialectName(String dbName)
+    private static String getDialectClassName(String dbName)
     {
         switch (dbName)
         {
