@@ -7,9 +7,9 @@ CREATE TABLE ABC
     colb bigint not null,
     col2 VARCHAR(100),
     col2n nVARCHAR(100),
+    --col 3 comment
     col3 char(1) default 'T',
     col3n nchar(1),
-    --col 3 comment
     col4 date not null,
     col5 TIMESTAMP,
     col6 NUMERIC(10,2),
@@ -41,3 +41,10 @@ alter TABLE abc add CONSTRAINT abc_fk1 foreign KEY (colb) REFERENCES table_234 (
 
 --added in version 10
 alter table abc add column col20 bigint default 0 not null;
+
+create table date_def
+(
+    col1 date DEFAULT CURRENT_DATE,
+    col2 time DEFAULT CURRENT_TIME,
+    col3 timestamp default current_timestamp
+);

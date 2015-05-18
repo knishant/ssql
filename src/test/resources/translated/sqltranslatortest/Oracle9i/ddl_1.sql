@@ -7,9 +7,9 @@ CREATE TABLE ABC
     COLB                           NUMBER(19,0)              NOT NULL,
     COL2                           VARCHAR2(100 CHAR),
     COL2N                          NVARCHAR(100),
+    --col 3 comment
     COL3                           CHAR(1 CHAR)              DEFAULT 'T',
     COL3N                          NCHAR(1),
-    --col 3 comment
     COL4                           DATE                      NOT NULL,
     COL5                           TIMESTAMP,
     COL6                           NUMBER(10,2),
@@ -44,4 +44,11 @@ ALTER TABLE ABC ADD CONSTRAINT ABC_FK1 FOREIGN KEY (COLB) REFERENCES TABLE_234 (
 
 --added in version 10
 ALTER TABLE ABC ADD COL20 NUMBER(19,0)  DEFAULT 0 NOT NULL;
+
+CREATE TABLE DATE_DEF
+(
+    COL1                           DATE                      DEFAULT CURRENT_DATE,
+    COL2                           DATE                      DEFAULT CURRENT_TIMESTAMP,
+    COL3                           TIMESTAMP                 DEFAULT CURRENT_TIMESTAMP
+);
 

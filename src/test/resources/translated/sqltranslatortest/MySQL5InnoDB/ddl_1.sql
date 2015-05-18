@@ -7,9 +7,9 @@ CREATE TABLE ABC
     COLB                           BIGINT                    NOT NULL,
     COL2                           VARCHAR(100),
     COL2N                          NVARCHAR(100),
+    -- col 3 comment
     COL3                           CHAR(1)                   DEFAULT 'T',
     COL3N                          NCHAR(1),
-    -- col 3 comment
     COL4                           DATE                      NOT NULL,
     COL5                           DATETIME,
     COL6                           DECIMAL(10,2),
@@ -44,4 +44,11 @@ ALTER TABLE ABC ADD CONSTRAINT ABC_FK1 FOREIGN KEY (COLB) REFERENCES TABLE_234 (
 
 -- added in version 10
 ALTER TABLE ABC ADD COLUMN COL20 BIGINT  DEFAULT 0 NOT NULL;
+
+CREATE TABLE DATE_DEF
+(
+    COL1                           DATE                      DEFAULT CURRENT_DATE,
+    COL2                           TIME                      DEFAULT CURRENT_TIME,
+    COL3                           DATETIME                  DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB;
 
