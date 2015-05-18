@@ -253,7 +253,6 @@ void TableElement(CreateTableStatement table) :
 }
 {
     (
-        //LOOKAHEAD(2)
 	    col = ColumnDefinition()            {table.addColumn(col);}
     |
         <K_CONSTRAINT> tc = TableConstraintDefinition()    {table.addTableConstraint(tc);}
@@ -271,7 +270,7 @@ Column ColumnDefinition() :
 	t=<S_IDENTIFIER>                    {col = new Column(t.image); col.setComments(getComments(t));}
 	DataType(col)
     [t2=<PLACE_HOLDER>                  {col.setTypePlaceHolder(PlaceHolder.createPlaceHolder(t2.image));}]
-    /* TODO order of DEFAULT and NOT NULL should not matter */
+    /* order of default value and not null constraint seem to matter in ansi sql */
     [<K_DEFAULT> val = ConstantValue()       {col.setDefaultValue(val);} ]
 
     [t2=<K_NOT> <K_NULL>                {col.setNotNull(true);} ]
