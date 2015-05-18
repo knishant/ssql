@@ -30,6 +30,8 @@ public class Oracle9iDialect extends Dialect
         typeNames.put(Types.BINARY, 2000, "raw($l)");
         typeNames.put(Types.BINARY, "long raw");
 
+        typeNames.put(Types.NVARCHAR, "nvarchar2($l)");
+
         typeNames.put(Types.VARBINARY, 2000, "raw($l)");
         typeNames.put(Types.VARBINARY, "long raw");
 

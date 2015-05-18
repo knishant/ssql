@@ -10,7 +10,7 @@ CREATE TABLE ABC
     not a very useful default value
     testing multi-line comment
      */
-    COL2N                          NVARCHAR(100)             DEFAULT NULL,
+    COL2N                          NVARCHAR2(100)            DEFAULT NULL,
     --col 3 comment
     COL3                           CHAR(1 CHAR)              DEFAULT 'T',
     COL3N                          NCHAR(1),

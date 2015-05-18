@@ -52,7 +52,7 @@
 </type>
 <type name='CLOB' template='CLOB'/>
 <type name='NCHAR' template='NCHAR($L)'/>
-<type name='NVARCHAR' template='NVARCHAR($L)'/>
+<type name='NVARCHAR' template='NVARCHAR2($L)'/>
 <type name='NCLOB' template='NCLOB'/>
 <type name='DATE' template='DATE'/>
 <type name='TIME' template='DATE'/>
