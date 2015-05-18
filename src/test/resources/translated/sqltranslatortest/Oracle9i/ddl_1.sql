@@ -6,6 +6,10 @@ CREATE TABLE ABC
     COLS                           NUMBER(5,0)               DEFAULT -1 NOT NULL,
     COLB                           NUMBER(19,0)              DEFAULT 123 NOT NULL,
     COL2                           VARCHAR2(100 CHAR)        DEFAULT 'empty',
+    /*
+    not a very useful default value
+    testing multi-line comment
+     */
     COL2N                          NVARCHAR(100)             DEFAULT NULL,
     --col 3 comment
     COL3                           CHAR(1 CHAR)              DEFAULT 'T',

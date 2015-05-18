@@ -6,6 +6,10 @@ CREATE TABLE ABC
     COLS                           SMALLINT                  DEFAULT -1 NOT NULL,
     COLB                           BIGINT                    DEFAULT 123 NOT NULL,
     COL2                           VARCHAR(100)              DEFAULT 'empty',
+    /*
+    not a very useful default value
+    testing multi-line comment
+     */
     COL2N                          NVARCHAR(100)             DEFAULT NULL,
     --col 3 comment
     COL3                           CHAR(1)                   DEFAULT 'T',
