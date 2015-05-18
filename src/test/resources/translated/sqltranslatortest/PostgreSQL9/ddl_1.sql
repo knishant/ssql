@@ -3,8 +3,8 @@ CREATE TABLE ABC
 (
     --col 1 comment
     COL1                           INTEGER                   NOT NULL,
-    COLS                           SMALLINT                  NOT NULL,
-    COLB                           BIGINT                    NOT NULL,
+    COLS                           SMALLINT                  DEFAULT -1 NOT NULL,
+    COLB                           BIGINT                    DEFAULT 123 NOT NULL,
     COL2                           VARCHAR(100),
     COL2N                          VARCHAR(100),
     --col 3 comment
@@ -17,7 +17,7 @@ CREATE TABLE ABC
     COL8                           TEXT,
     COL9                           OID,
     COL10                          REAL,
-    COL11                          DOUBLE PRECISION,
+    COL11                          DOUBLE PRECISION          DEFAULT 2.3,
     COL12                          REAL,
     COL13                          BOOLEAN
 );

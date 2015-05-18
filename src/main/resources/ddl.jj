@@ -137,9 +137,7 @@ TOKEN: /* functions */
 
 TOKEN : /* Numeric Constants */
 {
-	< S_NUMBER: <FLOAT>
-	    | <FLOAT> ( ["e","E"] ([ "-","+"])? <FLOAT> )?
-    	>
+	< S_NUMBER: ([ "-","+"])?<FLOAT> >
   | 	< #FLOAT: <INTEGER>
 	    | <INTEGER> ( "." <INTEGER> )?
 	    | "." <INTEGER>

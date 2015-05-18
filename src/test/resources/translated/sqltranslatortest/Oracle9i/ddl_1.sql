@@ -3,8 +3,8 @@ CREATE TABLE ABC
 (
     --col 1 comment
     COL1                           NUMBER(10,0)              NOT NULL,
-    COLS                           NUMBER(5,0)               NOT NULL,
-    COLB                           NUMBER(19,0)              NOT NULL,
+    COLS                           NUMBER(5,0)               DEFAULT -1 NOT NULL,
+    COLB                           NUMBER(19,0)              DEFAULT 123 NOT NULL,
     COL2                           VARCHAR2(100 CHAR),
     COL2N                          NVARCHAR(100),
     --col 3 comment
@@ -17,7 +17,7 @@ CREATE TABLE ABC
     COL8                           CLOB,
     COL9                           BLOB,
     COL10                          FLOAT,
-    COL11                          DOUBLE PRECISION,
+    COL11                          DOUBLE PRECISION          DEFAULT 2.3,
     COL12                          REAL,
     COL13                          NUMBER(1,0)
 );

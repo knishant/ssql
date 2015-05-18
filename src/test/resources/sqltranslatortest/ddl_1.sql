@@ -3,8 +3,8 @@ CREATE TABLE ABC
 (
     --col 1 comment
     col1 int not null,
-    cols smallint not null,
-    colb bigint not null,
+    cols smallint default -1 not null,
+    colb bigint default 123 not null,
     col2 VARCHAR(100),
     col2n nVARCHAR(100),
     --col 3 comment
@@ -17,7 +17,7 @@ CREATE TABLE ABC
     col8 clob,
     col9 blob,
     col10 float,
-    col11 DOUBLE PRECISION,
+    col11 DOUBLE PRECISION default 2.3,
     col12 real,
     col13 boolean
 );
