@@ -12,11 +12,13 @@
 <type name='BOOLEAN' template='BIT'/>
 <type name='CHAR' template='CHAR($L)'/>
 <type name='VARCHAR' template='LONGTEXT'>
-<weight size='65535' template='VARCHAR($L)'/>
+<weight size='8000' template='VARCHAR($L)'/>
 </type>
 <type name='CLOB' template='LONGTEXT'/>
 <type name='NCHAR' template='NCHAR($L)'/>
-<type name='NVARCHAR' template='NVARCHAR($L)'/>
+<type name='NVARCHAR' template='LONGTEXT'>
+<weight size='2000' template='NVARCHAR($L)'/>
+</type>
 <type name='NCLOB' template='NCLOB'/>
 <type name='DATE' template='DATE'/>
 <type name='TIME' template='TIME'/>

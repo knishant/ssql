@@ -69,8 +69,8 @@ CREATE TABLE VARCHAR_LIMIT
     COL4000                        VARCHAR(4000),
     COL4100                        VARCHAR(4100),
     COL8000                        VARCHAR(8000),
-    COL8100                        VARCHAR(8100),
-    COL65535                       VARCHAR(65535),
+    COL8100                        LONGTEXT,
+    COL65535                       LONGTEXT,
     COL66000                       LONGTEXT
 ) ENGINE=InnoDB;
 

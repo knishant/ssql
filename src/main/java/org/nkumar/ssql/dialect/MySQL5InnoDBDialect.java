@@ -24,8 +24,11 @@ public class MySQL5InnoDBDialect extends Dialect
         typeNames.put(Types.BLOB, "longblob");
         typeNames.put(Types.CLOB, "longtext");
         typeNames.put(Types.VARCHAR, "longtext");
-        typeNames.put(Types.VARCHAR, 65535, "varchar($l)");
-//          nvarchar has a limit of 21845
+        //following are different from hibernate
+        //this is to take care of the row limit
+        typeNames.put(Types.VARCHAR, 8000, "varchar($l)");
+        typeNames.put(Types.NVARCHAR, "longtext");
+        typeNames.put(Types.NVARCHAR, 2000, "nvarchar($l)");
     }
 
     @Override
