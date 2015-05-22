@@ -190,7 +190,6 @@ public final class GenericTranslatorSqlVisitor implements TranslatorSqlVisitor
     }
 
 
-
     @Override
     public final void visit(DropIndexStatement statement)
     {
@@ -408,10 +407,33 @@ public final class GenericTranslatorSqlVisitor implements TranslatorSqlVisitor
         {
             buffer.append(Util.padToSize("", 25 - (buffer.length() - bufferStartLength)));
         }
-        if (column.getDefaultValue() != null)
+        Value defaultValue = column.getDefaultValue();
+        if (defaultValue != null)
         {
-            buffer.append(caseHandler.transform(" default "));
-            column.getDefaultValue().accept(this);
+            boolean defaultValueSupported = true;
+            String dateValueFunction = defaultValue.getDateValueFunction();
+            if (dateValueFunction != null)
+            {
+                switch (dateValueFunction)
+                {
+                    case "current_date":
+                        defaultValueSupported = dialect.supportsDefaultCurrentDate();
+                        break;
+                    case "current_time":
+                        defaultValueSupported = dialect.supportsDefaultCurrentTime();
+                        break;
+                    case "current_timestamp":
+                        defaultValueSupported = dialect.supportsDefaultCurrentTimestamp();
+                        break;
+                    default:
+                        throw new AssertionError(dateValueFunction + " is not supported");
+                }
+            }
+            if (defaultValueSupported)
+            {
+                buffer.append(caseHandler.transform(" default "));
+                defaultValue.accept(this);
+            }
         }
         if (column.isNotNull())
         {
@@ -527,7 +549,6 @@ public final class GenericTranslatorSqlVisitor implements TranslatorSqlVisitor
             buffer.append(' ');
         }
     }
-
 
 
     private String getQuotedIdentifier(String identifier)

@@ -153,4 +153,19 @@ public class Dialect
     {
         return "";
     }
+
+    public boolean supportsDefaultCurrentDate()
+    {
+        return true;
+    }
+
+    public boolean supportsDefaultCurrentTime()
+    {
+        return true;
+    }
+
+    public boolean supportsDefaultCurrentTimestamp()
+    {
+        return true;
+    }
 }

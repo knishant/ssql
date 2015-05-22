@@ -60,4 +60,16 @@ public class MySQL5InnoDBDialect extends Dialect
     {
         return " ENGINE=InnoDB";
     }
+
+    @Override
+    public boolean supportsDefaultCurrentDate()
+    {
+        return false;
+    }
+
+    @Override
+    public boolean supportsDefaultCurrentTime()
+    {
+        return false;
+    }
 }

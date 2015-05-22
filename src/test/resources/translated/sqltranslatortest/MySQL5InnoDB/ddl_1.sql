@@ -17,7 +17,7 @@ CREATE TABLE ABC
     COL4                           DATE                      NOT NULL,
     COL5                           DATETIME,
     COL6                           DECIMAL(10,2),
-    COL7                           TIME                      DEFAULT CURRENT_TIME,
+    COL7                           TIME,
     COL8                           LONGTEXT,
     COL9                           LONGBLOB,
     COL10                          FLOAT,
@@ -54,8 +54,8 @@ ALTER TABLE ABC ADD CONSTRAINT ABC_UK2 UNIQUE (COL4);
 CREATE TABLE DATE_DEF
 (
     COL_PK                         INT                       NOT NULL,
-    COL1                           DATE                      DEFAULT CURRENT_DATE,
-    COL2                           TIME                      DEFAULT CURRENT_TIME,
+    COL1                           DATE,
+    COL2                           TIME,
     COL3                           DATETIME                  DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT DATE_DEF_PK PRIMARY KEY (COL_PK),
     CONSTRAINT DATE_DEF_FK FOREIGN KEY (COL1) REFERENCES ABC (COL4) ON DELETE CASCADE
