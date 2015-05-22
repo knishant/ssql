@@ -30,22 +30,23 @@ CREATE TABLE ABC
 alter table abc add CONSTRAINT abc_pk PRIMARY KEY  (col1);
 --uk comment
 --uk, though not really useful
-alter table abc add CONSTRAINT abc_pk UNIQUE  (col1, cols);
+alter table abc add CONSTRAINT abc_uk UNIQUE  (col1, cols);
 
 --index to be used by FK
-create index ABC_FK1 ON abc (col1b);
+create index ABC_FK1 ON abc (colb);
 
 create table table_234
 (
     colb bigint not null
 );
-alter table abc add CONSTRAINT table_234_pk PRIMARY KEY  (colb);
+alter table table_234 add CONSTRAINT table_234_pk PRIMARY KEY  (colb);
 --fk comment
 alter TABLE abc add CONSTRAINT abc_fk1 foreign KEY (colb) REFERENCES table_234 (colb) on delete cascade;
 
 --added in version 10
 alter table abc add column col20 bigint default 0 not null;
 
+alter table abc add constraint abc_uk2 unique (col4);
 create table date_def
 (
     col_pk int not null,
