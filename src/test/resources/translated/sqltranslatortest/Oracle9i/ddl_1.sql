@@ -67,10 +67,10 @@ CREATE TABLE VARCHAR_LIMIT
     COL10                          VARCHAR2(10 CHAR),
     COL255                         VARCHAR2(255 CHAR),
     COL4000                        VARCHAR2(4000 CHAR),
-    COL4100                        LONG,
-    COL8000                        LONG,
-    COL8100                        LONG,
-    COL65535                       LONG,
-    COL66000                       LONG
+    COL4100                        CLOB,
+    COL8000                        CLOB,
+    COL8100                        CLOB,
+    COL65535                       CLOB,
+    COL66000                       CLOB
 );
 

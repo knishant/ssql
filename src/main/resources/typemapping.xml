@@ -49,7 +49,7 @@
 <type name='BIT' template='NUMBER(1,0)'/>
 <type name='BOOLEAN' template='NUMBER(1,0)'/>
 <type name='CHAR' template='CHAR($L CHAR)'/>
-<type name='VARCHAR' template='LONG'>
+<type name='VARCHAR' template='CLOB'>
 <weight size='4000' template='VARCHAR2($L CHAR)'/>
 </type>
 <type name='CLOB' template='CLOB'/>

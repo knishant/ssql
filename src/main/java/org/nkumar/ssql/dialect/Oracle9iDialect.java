@@ -15,7 +15,8 @@ public class Oracle9iDialect extends Dialect
         super(dbName);
         typeNames.put(Types.CHAR, "char($l char)");
         typeNames.put(Types.VARCHAR, 4000, "varchar2($l char)");
-        typeNames.put(Types.VARCHAR, "long");
+        //following one line is different from hibernate
+        typeNames.put(Types.VARCHAR, "clob");
         typeNames.put(Types.BIT, "number(1,0)");
         typeNames.put(Types.BIGINT, "number(19,0)");
         typeNames.put(Types.SMALLINT, "number(5,0)");
