@@ -1,25 +1,23 @@
 package org.nkumar.ssql.model;
 
-import java.util.regex.Pattern;
-
 public final class CreateSequenceStatement extends CreateEntityStatement
 {
-    private static final Pattern NUMBER = Pattern.compile("[1-9][0-9]*");
-
     private long startWith;
     private boolean startWithSet;
+
+    private long incrementBy;
+    private boolean incrementBySet;
 
     private long minValue;
     private boolean minValueSet;
 
-    private String maxValue;
+    private long maxValue;
     private boolean maxValueSet;
 
-    private boolean noOrder;
+    private boolean cycle;
+    private boolean cycleSet;
 
-    private boolean noCache;
-
-    private boolean noCycle;
+    private boolean noCacheSet;
 
     public CreateSequenceStatement(String name)
     {
@@ -42,6 +40,22 @@ public final class CreateSequenceStatement extends CreateEntityStatement
         return startWithSet;
     }
 
+    public long getIncrementBy()
+    {
+        return incrementBy;
+    }
+
+    public void setIncrementBy(long incrementBy)
+    {
+        this.incrementBySet = true;
+        this.incrementBy = incrementBy;
+    }
+
+    public boolean isIncrementBySet()
+    {
+        return incrementBySet;
+    }
+
     public long getMinValue()
     {
         return minValue;
@@ -58,17 +72,13 @@ public final class CreateSequenceStatement extends CreateEntityStatement
         return minValueSet;
     }
 
-    public String getMaxValue()
+    public long getMaxValue()
     {
         return maxValue;
     }
 
-    public void setMaxValue(String maxValue)
+    public void setMaxValue(long maxValue)
     {
-        if (!NUMBER.matcher(maxValue).matches())
-        {
-            throw new IllegalArgumentException(maxValue + " should contain digits only");
-        }
         this.maxValue = maxValue;
         this.maxValueSet = true;
     }
@@ -78,34 +88,30 @@ public final class CreateSequenceStatement extends CreateEntityStatement
         return maxValueSet;
     }
 
-    public boolean isNoOrder()
+    public boolean isCycleSet()
     {
-        return noOrder;
+        return cycleSet;
     }
 
-    public void setNoOrder(boolean noOrder)
+    public boolean isCycle()
     {
-        this.noOrder = noOrder;
+        return cycle;
     }
 
-    public boolean isNoCache()
+    public void setCycle(boolean cycle)
     {
-        return noCache;
+        this.cycleSet = true;
+        this.cycle = cycle;
     }
 
-    public void setNoCache(boolean noCache)
+    public boolean isNoCacheSet()
     {
-        this.noCache = noCache;
+        return noCacheSet;
     }
 
-    public boolean isNoCycle()
+    public void setNoCacheSet(boolean noCacheSet)
     {
-        return noCycle;
-    }
-
-    public void setNoCycle(boolean noCycle)
-    {
-        this.noCycle = noCycle;
+        this.noCacheSet = noCacheSet;
     }
 
     @Override

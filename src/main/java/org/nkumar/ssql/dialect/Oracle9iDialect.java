@@ -56,4 +56,16 @@ public class Oracle9iDialect extends Dialect
     {
         return true;
     }
+
+    @Override
+    public String getNoCycleSequenceString()
+    {
+        return "nocycle";
+    }
+
+    @Override
+    public String getNoCacheSequenceString()
+    {
+        return "nocache";
+    }
 }

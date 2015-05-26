@@ -134,6 +134,24 @@ public class Dialect
         return false;
     }
 
+    public String getNoCycleSequenceString()
+    {
+        if (!supportsSequences())
+        {
+            throw new IllegalStateException("dialect does not support sequences");
+        }
+        return "no cycle";
+    }
+
+    public String getNoCacheSequenceString()
+    {
+        if (!supportsSequences())
+        {
+            throw new IllegalStateException("dialect does not support sequences");
+        }
+        return "no cache";
+    }
+
     public char openQuote()
     {
         return '"';

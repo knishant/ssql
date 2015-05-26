@@ -275,11 +275,19 @@ public final class GenericTranslatorSqlVisitor implements TranslatorSqlVisitor
     @Override
     public final void visit(CreateSequenceStatement statement)
     {
+        if (!dialect.supportsSequences())
+        {
+            return;
+        }
         startCreateStatement(statement);
         buffer.append(caseHandler.transform("sequence ")).append(getQuotedIdentifier(statement.getName()));
         if (statement.isStartWithSet())
         {
             buffer.append(caseHandler.transform(" start with ")).append(statement.getStartWith());
+        }
+        if (statement.isIncrementBySet())
+        {
+            buffer.append(caseHandler.transform(" increment by ")).append(statement.getIncrementBy());
         }
         if (statement.isMinValueSet())
         {
@@ -287,50 +295,21 @@ public final class GenericTranslatorSqlVisitor implements TranslatorSqlVisitor
         }
         if (statement.isMaxValueSet())
         {
-            buffer.append(caseHandler.transform(" maxvalue "));
-            //            if (context.isPostgres())
-//            {
-//                long number;
-//                try
-//                {
-//                    number = Long.parseLong(maxValue);
-//                }
-//                catch (NumberFormatException ignore)
-//                {
-//                    number = Long.MAX_VALUE;
-//                }
-//                append(number);
-//            }
-//            else
-//            {
-            buffer.append(statement.getMaxValue());
-            //            }
+            buffer.append(caseHandler.transform(" maxvalue ")).append(statement.getMaxValue());
         }
-//        if (noCycle)
-//        {
-//            if (context.isOracle())
-//            {
-//                append(" NOCYCLE");
-//            }
-//            else if (context.isPostgres())
-//            {
-//                append(" NO CYCLE");
-//            }
-//        }
-//        if (noCache)
-//        {
-//            if (context.isOracle())
-//            {
-//                append(" NOCACHE");
-//            }
-//        }
-//        if (noOrder)
-//        {
-//            if (context.isOracle())
-//            {
-//                append(" NOORDER");
-//            }
-//        }
+        if (statement.isCycleSet())
+        {
+            String option = statement.isCycle() ? "cycle" : dialect.getNoCycleSequenceString();
+            buffer.append(" ").append(caseHandler.transform(option));
+        }
+        if (statement.isNoCacheSet())
+        {
+            String option = dialect.getNoCacheSequenceString();
+            if (!option.isEmpty())
+            {
+                buffer.append(" ").append(caseHandler.transform(option));
+            }
+        }
         endCreateStatement(statement);
     }
 

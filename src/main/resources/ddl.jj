@@ -102,9 +102,11 @@ TOKEN:	/* Key words */
 |   <K_WITH: "with">
 |   <K_MAXVALUE: "maxvalue">
 |   <K_MINVALUE: "minvalue">
-|   <K_NOCYCLE: "nocycle">
-|   <K_NOCACHE: "nocache">
-|   <K_NOORDER: "noorder">
+|   <K_NO: "no">
+|   <K_CYCLE: "cycle">
+|   <K_CACHE: "cache">
+|   <K_INCREMENT: "increment">
+|   <K_BY: "by">
 }
 
 TOKEN:  /* data types */
@@ -724,7 +726,10 @@ CreateSequenceStatement CreateSequenceStatement() :
 {
     <K_SEQUENCE>
     t=<S_IDENTIFIER>    {sequence = new CreateSequenceStatement(t.image);}
-    (SequenceOption(sequence)) +
+    (
+
+    SequenceOption(sequence)
+    ) +
     {return sequence;}
 }
 
@@ -740,6 +745,11 @@ void SequenceOption(CreateSequenceStatement seq) :
             number=IntegerLengthSpecification()     {seq.setStartWith(number);}
 	    )
 	|
+        (
+            <K_INCREMENT> <K_BY>
+            number=IntegerLengthSpecification()     {seq.setIncrementBy(number);}
+	    )
+	|
 	    (
             <K_MINVALUE>
             number=IntegerLengthSpecification()     {seq.setMinValue(number);}
@@ -747,19 +757,20 @@ void SequenceOption(CreateSequenceStatement seq) :
 	|
 	    (
             <K_MAXVALUE>
-            t=<S_NUMBER>     {seq.setMaxValue(t.image);}
+            number=IntegerLengthSpecification()     {seq.setMaxValue(number);}
+	    )
+	|
+        LOOKAHEAD(2)
+	    (
+            <K_NO> <K_CACHE>      {seq.setNoCacheSet(true);}
 	    )
 	|
 	    (
-            <K_NOCYCLE>      {seq.setNoCycle(true);}
+            <K_NO> <K_CYCLE>      {seq.setCycle(false);}
 	    )
 	|
 	    (
-            <K_NOCACHE>      {seq.setNoCache(true);}
-	    )
-	|
-	    (
-            <K_NOORDER>      {seq.setNoOrder(true);}
+            <K_CYCLE>      {seq.setCycle(true);}
 	    )
 	)
 }

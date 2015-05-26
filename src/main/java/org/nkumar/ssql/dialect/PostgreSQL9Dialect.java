@@ -44,4 +44,9 @@ public class PostgreSQL9Dialect extends Dialect
         return true;
     }
 
+    @Override
+    public String getNoCacheSequenceString()
+    {
+        return "";
+    }
 }
