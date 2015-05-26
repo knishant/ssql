@@ -46,4 +46,10 @@ public class SQLServer2005Dialect extends Dialect
     {
         return '[';
     }
+
+    @Override
+    public String getAddColumnString()
+    {
+        return "add";
+    }
 }

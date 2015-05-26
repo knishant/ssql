@@ -45,4 +45,10 @@ public class SQLServer2000Dialect extends Dialect
     {
         return '[';
     }
+
+    @Override
+    public String getAddColumnString()
+    {
+        return "add";
+    }
 }
