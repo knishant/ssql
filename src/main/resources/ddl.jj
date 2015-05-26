@@ -46,6 +46,10 @@ public class SqlParser
             {
                 kind = 2;
             }
+            else if (spt.kind == SqlParserConstants.CUSTOM_COMMENT)
+            {
+                kind = 3;
+            }
             else
             {
                 continue;
@@ -153,7 +157,8 @@ TOKEN :
 
 SPECIAL_TOKEN:
 {
-   <LINE_COMMENT: "--"(~["\r","\n"])*>
+   <CUSTOM_COMMENT: "---START-CUSTOM" (~["-"])* "---END-CUSTOM">
+|  <LINE_COMMENT: "--"(~["\r","\n"])*>
 |  <MULTI_LINE_COMMENT: "/*" (~["*"])* "*" ("*" | (~["*","/"] (~["*"])* "*"))* "/">
 }
 
