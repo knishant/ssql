@@ -170,7 +170,8 @@ TOKEN:
     < S_IDENTIFIER: (<LETTER>)+ (<DIGIT> | <LETTER> |<SPECIAL_CHARS>)* >
   | < #LETTER: ["a"-"z", "A"-"Z"] >
   | < #SPECIAL_CHARS: "_">
-  | < S_CHAR_LITERAL: "'" (~["'"])* "'" ("'" (~["'"])* "'")*>
+  | < S_CHAR_LITERAL: "'" (~["'"])* "'">
+/*  | < S_CHAR_LITERAL: "'" (~["'"])* "'" ("'" (~["'"])* "'")*> */
 /*  | < S_QUOTED_IDENTIFIER: "\"" (~["\n","\r","\""])* "\"" > */
 }
 
