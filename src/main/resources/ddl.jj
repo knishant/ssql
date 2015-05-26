@@ -596,20 +596,16 @@ AlterTableStatement AlterTableAction(String tableName) :
 }
 {
     (
-        <K_ADD>
-        (
-            col = AddColumnDefinition()                         {stmt = new AddColumnStatement(tableName, col);}
-        |
-            tc = AddTableConstraintDefinition()                 {stmt = new AddTableConstraintStatement(tableName, tc);}
-        )
+        LOOKAHEAD(2)
+        col = AddColumnDefinition()                         {stmt = new AddColumnStatement(tableName, col);}
     |
-        <K_DROP>
-        (
-            columnName = DropColumnDefinition()                 {stmt = new DropColumnStatement(tableName, columnName);}
-        |
-            constraintName = DropTableConstraintDefinition()    {stmt = new DropTableConstraintStatement(
+        tc = AddTableConstraintDefinition()                 {stmt = new AddTableConstraintStatement(tableName, tc);}
+    |
+        LOOKAHEAD(2)
+        columnName = DropColumnDefinition()                 {stmt = new DropColumnStatement(tableName, columnName);}
+    |
+        constraintName = DropTableConstraintDefinition()    {stmt = new DropTableConstraintStatement(
                                                                             tableName, constraintName);}
-        )
     )
     {return stmt;}
 }
@@ -619,7 +615,7 @@ Column AddColumnDefinition() :
     Column col;
 }
 {
-    <K_COLUMN>
+    <K_ADD> <K_COLUMN>
     col = ColumnDefinition()        {return col;}
 }
 
@@ -628,7 +624,7 @@ String DropColumnDefinition() :
     Token t;
 }
 {
-     <K_COLUMN>
+    <K_DROP> <K_COLUMN>
      t = <S_IDENTIFIER>     {return t.image;}
      /* this might change when we implement the following behaviour*/
      /*<drop behavior>*/
@@ -639,6 +635,7 @@ TableConstraint AddTableConstraintDefinition() :
     TableConstraint tc;
 }
 {
+    <K_ADD>
     tc = TableConstraintDefinition()    {return tc;}
 }
 
@@ -647,6 +644,7 @@ String DropTableConstraintDefinition() :
     String name;
 }
 {
+    <K_DROP>
     name = ConstraintNameDefinition()       {return name;}
     /* this might change when we implement the following behaviour*/
     /*<drop behavior>*/
