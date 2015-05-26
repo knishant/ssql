@@ -418,6 +418,14 @@ public final class GenericTranslatorSqlVisitor implements TranslatorSqlVisitor
         {
             buffer.append(caseHandler.transform(" not null"));
         }
+        else
+        {
+            String nullColumnString = dialect.getNullColumnString();
+            if (!nullColumnString.isEmpty())
+            {
+                buffer.append(" ").append(caseHandler.transform(nullColumnString));
+            }
+        }
         trimRight();
     }
 

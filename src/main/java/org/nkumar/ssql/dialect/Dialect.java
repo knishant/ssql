@@ -186,4 +186,9 @@ public class Dialect
     {
         return true;
     }
+
+    public String getNullColumnString()
+    {
+        return "";
+    }
 }
