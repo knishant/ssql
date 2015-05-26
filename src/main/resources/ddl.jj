@@ -262,7 +262,7 @@ void TableElement(CreateTableStatement table) :
     (
 	    col = ColumnDefinition()            {table.addColumn(col);}
     |
-        <K_CONSTRAINT> tc = TableConstraintDefinition()    {table.addTableConstraint(tc);}
+        tc = TableConstraintDefinition()    {table.addTableConstraint(tc);}
     )
 }
 
@@ -448,7 +448,7 @@ String ConstraintNameDefinition() :
     Token t;
 }
 {
-    t=<S_IDENTIFIER> {return t.image;}
+    <K_CONSTRAINT> t=<S_IDENTIFIER> {return t.image;}
 }
 
 TableConstraint TableConstraint() :
@@ -639,7 +639,6 @@ TableConstraint AddTableConstraintDefinition() :
     TableConstraint tc;
 }
 {
-    <K_CONSTRAINT>
     tc = TableConstraintDefinition()    {return tc;}
 }
 
@@ -648,7 +647,6 @@ String DropTableConstraintDefinition() :
     String name;
 }
 {
-    <K_CONSTRAINT>
     name = ConstraintNameDefinition()       {return name;}
     /* this might change when we implement the following behaviour*/
     /*<drop behavior>*/
