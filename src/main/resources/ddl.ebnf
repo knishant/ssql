@@ -1,0 +1,66 @@
+DdlStatement ::= CreateTableStatement | CreateIndexStatement | CreateSequenceStatement | DropTableStatement | DropIndexStatement | DropSequenceStatement | AlterTableStatement
+
+CreateTableStatement ::= 'CREATE' 'TABLE' Identifier '(' TableElement (',' TableElement)* ')' ';'
+
+TableElement ::= ( ColumnDefinition | TableConstraintDefinition )
+
+ColumnDefinition ::= Identifier DataType [ DefaultClause ] [ 'NOT' 'NULL']
+
+DataType ::= ( 'CHAR' [ '(' Length ')' ])
+            | ( 'VARCHAR'  '(' Length ')')
+            | ( 'CLOB' )
+            | ( 'NCHAR' [ '(' Length ')' ])
+            | ( 'NVARCHAR'  '(' Length ')')
+            | ( 'NCLOB' )
+            | ( 'BLOB' )
+            | ( 'BIT' ['VARYING'] [ '(' Length ')' ])
+            | ( 'NUMERIC'  ['(' Precision [ ',' Scale] ')'] )
+            | ( 'INT' )
+            | ( 'SMALLINT' )
+            | ( 'BIGINT' )
+            | ( 'FLOAT' )
+            | ( 'REAL' )
+            | ( 'DOUBLE' 'PRECISION' )
+            | ( 'BOOLEAN' )
+            | ( 'DATE' )
+            | ( 'TIME' )
+            | ( 'TIMESTAMP' )
+
+DefaultClause ::= 'DEFAULT' ( Literal | 'NULL' | ( 'CURRENT_DATE' | 'CURRENT_TIME' | 'CURRENT_TIMESTAMP'))
+
+TableConstraintDefinition ::= ConstraintNameDefinition TableConstraint
+
+ConstraintNameDefinition ::= 'CONSTRAINT' Identifier
+
+TableConstraint ::= ( ( ('UNIQUE' | ('PRIMARY' 'KEY')) '(' ColumnList ')')
+                    | ( 'FOREIGN' 'KEY' '(' ColumnList ')' 'REFERENCES' Identifer '(' ColumnList ')' ['ON' 'DELETE' 'CASCADE']) )
+
+CreateIndexStatement ::= 'CREATE' ['UNIQUE'] 'INDEX' Identifier 'ON' Identifier '(' ADColumn (',' ADColumn)* ')' ';'
+
+ADColumn ::= Identifier [ ('ASC' | 'DESC') ]
+
+CreateSequenceStatement ::= 'CREATE' 'SEQUENCE' Identifier (
+                                ( 'START' 'WITH' Number)
+                            |   ( 'INCREMENT' 'BY' Number)
+                            |   ( 'MINVALUE' Number)
+                            |   ( 'MAXVALUE' Number)
+                            |   ( 'NO' 'CACHE')
+                            |   ( ['NO'] 'CYCLE')
+                            )* ';'
+
+DropTableStatement ::= 'DROP' 'TABLE' Identifier ['CASCADE' 'CONSTRAINTS'] ';'
+
+DropIndexStatement ::= 'DROP' 'INDEX' Identifier ';'
+
+DropSequenceStatement ::= 'DROP' 'SEQUENCE' Identifier ';'
+
+AlterTableStatement ::= 'ALTER' 'TABLE' Identifier (AddColumnDefinition | DropColumnDefinition | AddTableConstraintDefinition | DropTableConstraintDefinition) ';'
+
+AddColumnDefinition ::= 'ADD' 'COLUMN' ColumnDefinition
+
+DropColumnDefinition ::= 'DROP' 'COLUMN' Identifier
+
+AddTableConstraintDefinition ::= 'ADD' TableConstraintDefinition
+DropTableConstraintDefinition ::= 'DROP' ConstraintNameDefinition
+
+Identifier ::= 'a-zA-Z0-9_'
