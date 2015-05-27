@@ -52,20 +52,20 @@ public final class SqlTranslatorTest
     @Test
     public void translateDDL1() throws Exception
     {
-        assertCorrectTranslation("ddl_1.sql", "Identity", "MySQL5InnoDB", "Oracle9i", "PostgreSQL9", "SQLServer2005");
+        assertCorrectTranslation("ddl_1.sql", "Identity", "MySQL5InnoDB", "Oracle9i", "PostgreSQL9", "SQLServer2005", "SQLServer2008");
     }
 
     @Test
     public void translateSpringBatchDDL() throws Exception
     {
-        assertCorrectTranslation("spring_batch.sql", "Identity", "MySQL5InnoDB","Oracle9i", "PostgreSQL9", "SQLServer2005");
-        assertCorrectTranslation("spring_batch_drop.sql", "Identity", "MySQL5InnoDB","Oracle9i", "PostgreSQL9", "SQLServer2005");
+        assertCorrectTranslation("spring_batch.sql", "Identity", "MySQL5InnoDB","Oracle9i", "PostgreSQL9", "SQLServer2005", "SQLServer2008");
+        assertCorrectTranslation("spring_batch_drop.sql", "Identity", "MySQL5InnoDB","Oracle9i", "PostgreSQL9", "SQLServer2005", "SQLServer2008");
     }
 
     @Test
     public void translateQuartzDDL() throws Exception
     {
-        assertCorrectTranslation("quartz.sql", "Identity", "MySQL5InnoDB","Oracle9i", "PostgreSQL9", "SQLServer2005");
+        assertCorrectTranslation("quartz.sql", "Identity", "MySQL5InnoDB","Oracle9i", "PostgreSQL9", "SQLServer2005", "SQLServer2008");
     }
 
     private static void assertCorrectTranslation(String sqlFileName, String... dbnames) throws Exception
