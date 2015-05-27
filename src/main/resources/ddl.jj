@@ -159,8 +159,24 @@ TOKEN :
     <PLACE_HOLDER: "/*{L{" (~["}"])* "}}*/">
 }
 
+/*
+SKIP:
+{
+    "---START-CUSTOM" : CUSTOM_COMMENT
+}
+<CUSTOM_COMMENT> SKIP:
+{
+    "---END-CUSTOM" : DEFAULT
+}
+<CUSTOM_COMMENT> MORE:
+{
+    <~[]>
+}
+*/
+
 SPECIAL_TOKEN:
 {
+   /* TODO this does not allow the content to have minus sign */
    <CUSTOM_COMMENT: "---START-CUSTOM" (~["-"])* "---END-CUSTOM">
 |  <LINE_COMMENT: "--"(~["\r","\n"])*>
 |  <MULTI_LINE_COMMENT: "/*" (~["*"])* "*" ("*" | (~["*","/"] (~["*"])* "*"))* "/">
