@@ -1,12 +1,8 @@
 Is DECIMAL even supported?
 
-sequence supported from sql server 2012 version
-
 add support for DerbyTenSevenDialect which is packaged in java 7 onwards
 
 sample sql files at
 
 https://github.com/spring-projects/spring-batch/tree/master/spring-batch-core/src/main/resources/org/springframework/batch/core
-
-innodb
 
