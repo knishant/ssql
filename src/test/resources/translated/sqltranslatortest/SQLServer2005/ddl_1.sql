@@ -74,3 +74,11 @@ CREATE TABLE VARCHAR_LIMIT
     COL66000                       VARCHAR(MAX)
 );
 
+CREATE TABLE MONEY_TABLE
+(
+    COL1M                          NUMERIC(19,4),
+    COL1N                          NUMERIC(19,4),
+    COL2M                          NUMERIC(10,4),
+    COL2N                          NUMERIC(10,4)
+);
+

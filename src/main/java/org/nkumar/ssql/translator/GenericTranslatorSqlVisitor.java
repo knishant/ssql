@@ -320,17 +320,23 @@ public final class GenericTranslatorSqlVisitor implements TranslatorSqlVisitor
     {
         String datatype;
         int sqlCode = type.getType();
-        if (type.isLengthSet() || type.isPrecisionScaleSet())
+        if (dialect.handleCustomTypeAliases() && type.getAlias() != null)
         {
-            PrecisionScaleBean precisionScale = type.getPrecisionScale();
-            datatype = dialect.getTypeName(sqlCode, type.getLength(),
-                    precisionScale.getPrecision(), precisionScale.getScale());
+            datatype = type.getAlias();
         }
         else
         {
-            datatype = dialect.getTypeName(sqlCode);
+            if (type.isLengthSet() || type.isPrecisionScaleSet())
+            {
+                PrecisionScaleBean precisionScale = type.getPrecisionScale();
+                datatype = dialect.getTypeName(sqlCode, type.getLength(),
+                        precisionScale.getPrecision(), precisionScale.getScale());
+            }
+            else
+            {
+                datatype = dialect.getTypeName(sqlCode);
+            }
         }
-
         buffer.append(caseHandler.transform(datatype)).append(" ");
     }
 

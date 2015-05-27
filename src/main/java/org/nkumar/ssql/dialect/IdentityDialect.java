@@ -13,4 +13,9 @@ public final class IdentityDialect extends Dialect
         return "cascade constraints";
     }
 
+    @Override
+    public boolean handleCustomTypeAliases()
+    {
+        return true;
+    }
 }

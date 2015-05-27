@@ -74,3 +74,11 @@ CREATE TABLE VARCHAR_LIMIT
     COL66000                       LONGTEXT
 ) ENGINE=InnoDB;
 
+CREATE TABLE MONEY_TABLE
+(
+    COL1M                          DECIMAL(19,4),
+    COL1N                          DECIMAL(19,4),
+    COL2M                          DECIMAL(10,4),
+    COL2N                          DECIMAL(10,4)
+) ENGINE=InnoDB;
+

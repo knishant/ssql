@@ -3,6 +3,7 @@ package org.nkumar.ssql.model;
 public final class PredefinedType implements SqlVisitable
 {
     private final int type;
+    private String alias;
     private boolean lengthSet;
     @SuppressWarnings("MagicNumber")
     private long length = 255;
@@ -49,6 +50,16 @@ public final class PredefinedType implements SqlVisitable
     {
         this.precisionScaleSet = true;
         this.precisionScale = precisionScale;
+    }
+
+    public String getAlias()
+    {
+        return alias;
+    }
+
+    public void setAlias(String alias)
+    {
+        this.alias = alias;
     }
 
     @Override

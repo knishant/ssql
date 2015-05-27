@@ -191,4 +191,9 @@ public class Dialect
     {
         return "";
     }
+
+    public boolean handleCustomTypeAliases()
+    {
+        return false;
+    }
 }

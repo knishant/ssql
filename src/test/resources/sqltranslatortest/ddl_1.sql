@@ -77,3 +77,11 @@ create trigger dummy;
 CREATE SEQUENCE Seq_1 start with 100 minvalue 100 increment by 50 MAXVALUE 9223372036854775807 NO CYCLE no cache;
 
 CREATE SEQUENCE Seq_2 MAXVALUE 9223372036854775807 CYCLE;
+
+create table money_table
+(
+    col1m   money,
+    col1n   NUMERIC(19,4),
+    col2m   smallmoney,
+    col2n   NUMERIC(10,4)
+);

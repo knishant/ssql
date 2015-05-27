@@ -132,6 +132,8 @@ TOKEN:  /* data types */
 |   <T_DATE: "date">
 |   <T_TIME: "time">
 |   <T_TIMESTAMP: "timestamp">
+|   <T_MONEY: "money">
+|   <T_SMALLMONEY: "smallmoney">
 }
 
 TOKEN: /* functions */
@@ -393,6 +395,14 @@ PredefinedType PredefinedType() :
 	|
 	    (
 	        t=<T_TIMESTAMP> {type = new PredefinedType(Types.TIMESTAMP);}
+	    )
+	|
+	    (
+	        t=<T_MONEY> {type = CustomTypes.create(t.image);}
+	    )
+	|
+	    (
+	        t=<T_SMALLMONEY> {type = CustomTypes.create(t.image);}
 	    )
 	)
 	{

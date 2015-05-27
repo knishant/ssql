@@ -25,6 +25,9 @@ DataType ::= ( 'CHAR' [ '(' Length ')' ])
             | ( 'DATE' )
             | ( 'TIME' )
             | ( 'TIMESTAMP' )
+            | ( 'MONEY' )
+            | ( 'SMALLMONEY' )
+            )
 
 DefaultClause ::= 'DEFAULT' ( Literal | 'NULL' | ( 'CURRENT_DATE' | 'CURRENT_TIME' | 'CURRENT_TIMESTAMP'))
 
