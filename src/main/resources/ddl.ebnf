@@ -4,17 +4,17 @@ CreateTableStatement ::= 'CREATE' 'TABLE' Identifier '(' TableElement (',' Table
 
 TableElement ::= ( ColumnDefinition | TableConstraintDefinition )
 
-ColumnDefinition ::= Identifier DataType [ DefaultClause ] [ 'NOT' 'NULL']
+ColumnDefinition ::= Identifier DataType DefaultClause? ('NOT' 'NULL')?
 
-DataType ::= ( 'CHAR' [ '(' Length ')' ])
+DataType ::= ( 'CHAR' ( '(' Length ')' )?)
             | ( 'VARCHAR'  '(' Length ')')
             | ( 'CLOB' )
-            | ( 'NCHAR' [ '(' Length ')' ])
+            | ( 'NCHAR' ( '(' Length ')' )?)
             | ( 'NVARCHAR'  '(' Length ')')
             | ( 'NCLOB' )
             | ( 'BLOB' )
-            | ( 'BIT' ['VARYING'] [ '(' Length ')' ])
-            | ( 'NUMERIC'  ['(' Precision [ ',' Scale] ')'] )
+            | ( 'BIT' 'VARYING'? ( '(' Length ')' )?)
+            | ( 'NUMERIC'  ('(' Precision ( ',' Scale )? ')')? )
             | ( 'INT' )
             | ( 'SMALLINT' )
             | ( 'BIGINT' )
@@ -27,7 +27,6 @@ DataType ::= ( 'CHAR' [ '(' Length ')' ])
             | ( 'TIMESTAMP' )
             | ( 'MONEY' )
             | ( 'SMALLMONEY' )
-            )
 
 DefaultClause ::= 'DEFAULT' ( Literal | 'NULL' | ( 'CURRENT_DATE' | 'CURRENT_TIME' | 'CURRENT_TIMESTAMP'))
 
@@ -36,11 +35,11 @@ TableConstraintDefinition ::= ConstraintNameDefinition TableConstraint
 ConstraintNameDefinition ::= 'CONSTRAINT' Identifier
 
 TableConstraint ::= ( ( ('UNIQUE' | ('PRIMARY' 'KEY')) '(' ColumnList ')')
-                    | ( 'FOREIGN' 'KEY' '(' ColumnList ')' 'REFERENCES' Identifer '(' ColumnList ')' ['ON' 'DELETE' 'CASCADE']) )
+                    | ( 'FOREIGN' 'KEY' '(' ColumnList ')' 'REFERENCES' Identifer '(' ColumnList ')' ('ON' 'DELETE' 'CASCADE')?) )
 
-CreateIndexStatement ::= 'CREATE' ['UNIQUE'] 'INDEX' Identifier 'ON' Identifier '(' ADColumn (',' ADColumn)* ')' ';'
+CreateIndexStatement ::= 'CREATE' 'UNIQUE'? 'INDEX' Identifier 'ON' Identifier '(' ADColumn (',' ADColumn)* ')' ';'
 
-ADColumn ::= Identifier [ ('ASC' | 'DESC') ]
+ADColumn ::= Identifier ( 'ASC' | 'DESC' )?
 
 CreateSequenceStatement ::= 'CREATE' 'SEQUENCE' Identifier (
                                 ( 'START' 'WITH' Number)
@@ -48,10 +47,10 @@ CreateSequenceStatement ::= 'CREATE' 'SEQUENCE' Identifier (
                             |   ( 'MINVALUE' Number)
                             |   ( 'MAXVALUE' Number)
                             |   ( 'NO' 'CACHE')
-                            |   ( ['NO'] 'CYCLE')
+                            |   ( 'NO'? 'CYCLE')
                             )* ';'
 
-DropTableStatement ::= 'DROP' 'TABLE' Identifier ['CASCADE' 'CONSTRAINTS'] ';'
+DropTableStatement ::= 'DROP' 'TABLE' Identifier ('CASCADE' 'CONSTRAINTS')? ';'
 
 DropIndexStatement ::= 'DROP' 'INDEX' Identifier ';'
 
