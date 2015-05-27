@@ -70,7 +70,7 @@ create table varchar_limit
     col66000 varchar(66000)
 );
 
----START-CUSTOM dialect = PostgreSQL9
+---START-CUSTOM dialect=PostgreSQL9
 create trigger dummy;
 ---END-CUSTOM
 

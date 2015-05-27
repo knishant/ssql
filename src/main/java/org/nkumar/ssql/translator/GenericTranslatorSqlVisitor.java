@@ -445,7 +445,6 @@ public final class GenericTranslatorSqlVisitor implements TranslatorSqlVisitor
         {
             return;
         }
-        System.out.println("comments.length = " + comments.length);
         for (Comment comment : comments)
         {
             if (padding != null)
