@@ -320,7 +320,7 @@ public final class GenericTranslatorSqlVisitor implements TranslatorSqlVisitor
     {
         String datatype;
         int sqlCode = type.getType();
-        if (dialect.handleCustomTypeAliases() && type.getAlias() != null)
+        if (dialect.isIdentity() && type.getAlias() != null)
         {
             datatype = type.getAlias();
         }
@@ -463,7 +463,7 @@ public final class GenericTranslatorSqlVisitor implements TranslatorSqlVisitor
                 commentStr = commentStr.replaceFirst("--([^ ])", "-- $1");
             }
             //extract sql from the custom comment for the right dialect
-            if (comment.getKind() == 3)
+            if (comment.getKind() == 3 && !dialect.isIdentity())
             {
                 Matcher matcher = CUSTOM_COMMENT_PATTERN.matcher(commentStr);
                 if (matcher.matches())

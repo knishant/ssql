@@ -70,8 +70,9 @@ create table varchar_limit
     col66000 varchar(66000)
 );
 
----START-CUSTOM dialect=PostgreSQL9
-create trigger dummy;
+---START-CUSTOM dialect=Oracle9i
+create view custom_view as
+select col1, col10 from varchar_limit;
 ---END-CUSTOM
 
 CREATE SEQUENCE Seq_1 start with 100 minvalue 100 increment by 50 MAXVALUE 9223372036854775807 NO CYCLE no cache;

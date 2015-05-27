@@ -14,7 +14,13 @@ public final class IdentityDialect extends Dialect
     }
 
     @Override
-    public boolean handleCustomTypeAliases()
+    public boolean isIdentity()
+    {
+        return true;
+    }
+
+    @Override
+    public boolean supportsSequences()
     {
         return true;
     }

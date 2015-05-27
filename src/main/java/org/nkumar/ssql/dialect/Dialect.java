@@ -192,7 +192,7 @@ public class Dialect
         return "";
     }
 
-    public boolean handleCustomTypeAliases()
+    public boolean isIdentity()
     {
         return false;
     }
