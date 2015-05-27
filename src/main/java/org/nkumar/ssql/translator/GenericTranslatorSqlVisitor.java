@@ -29,6 +29,8 @@ import org.nkumar.ssql.model.Value;
 import org.nkumar.ssql.util.Util;
 
 import java.util.Iterator;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public final class GenericTranslatorSqlVisitor implements TranslatorSqlVisitor
 {
@@ -434,21 +436,53 @@ public final class GenericTranslatorSqlVisitor implements TranslatorSqlVisitor
         appendComments(comments, null);
     }
 
+    private static final Pattern CUSTOM_COMMENT_PATTERN = Pattern.compile(
+            "---START-CUSTOM[ ]+dialect=([a-zA-Z0-9_,]+)(.*)---END-CUSTOM", Pattern.DOTALL);
+
     private void appendComments(Comment[] comments, String padding)
     {
-        if (comments != null)
+        if (comments == null)
         {
-            for (Comment comment : comments)
+            return;
+        }
+        System.out.println("comments.length = " + comments.length);
+        for (Comment comment : comments)
+        {
+            if (padding != null)
             {
-                if (padding != null)
+                buffer.append(padding);
+            }
+            String commentStr = comment.getComment();
+            if (comment.getKind() == 1 && dialect.needsSpaceAfterDoubleDashComment())
+            {
+                commentStr = commentStr.replaceFirst("--([^ ])", "-- $1");
+            }
+            //extract sql from the custom comment for the right dialect
+            if (comment.getKind() == 3)
+            {
+                Matcher matcher = CUSTOM_COMMENT_PATTERN.matcher(commentStr);
+                if (matcher.matches())
                 {
-                    buffer.append(padding);
+                    String dialects = (matcher.group(1) + ",").toLowerCase();
+                    String sql = matcher.group(2);
+                    if (dialects.contains(dialect.getDbName().toLowerCase() + ","))
+                    {
+                        commentStr = sql;
+                    }
+                    else
+                    {
+                        commentStr = "";
+                    }
                 }
-                String commentStr = comment.getComment();
-                if (comment.getKind() == 1 && dialect.needsSpaceAfterDoubleDashComment())
+                else
                 {
-                    commentStr = commentStr.replaceFirst("--([^ ])", "-- $1");
+                    System.err.println("Following custom comment didnot match the expected pattern. Ignored.");
+                    System.err.println(commentStr);
+                    commentStr = "";
                 }
+            }
+            if (!commentStr.isEmpty())
+            {
                 buffer.append(commentStr).append("\n");
             }
         }
