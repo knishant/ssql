@@ -43,7 +43,7 @@ public final class SqlTranslator
         }
         catch (ClassCastException e)
         {
-            throw new RuntimeException(dialectClassName + " not of type TranslatorSqlVisitor", e);
+            throw new RuntimeException(dialectClassName + " not of type Dialect", e);
         }
         catch (Exception e)
         {
