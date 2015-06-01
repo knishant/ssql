@@ -3,6 +3,7 @@ package org.nkumar.ssql.dialect;
 import org.nkumar.ssql.translator.TypeNames;
 
 import java.sql.Types;
+import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
@@ -126,10 +127,16 @@ public class Dialect
         builder.append("<mapping dbname='").append(dbName).append("'>\n");
         builder.append(typeNames.toXml());
         builder.append("</mapping>\n");
-        if (!keywords.isEmpty())
+        Collection<String> kwds = new TreeSet<>(keywords);
+        if (!isIdentity())
+        {
+            Dialect dialect = new Dialect("base");
+            kwds.removeAll(dialect.keywords);
+        }
+        if (!kwds.isEmpty())
         {
             builder.append("<keywords>\n");
-            for (String keyword : keywords)
+            for (String keyword : kwds)
             {
                 builder.append("<keyword value='").append(keyword.toUpperCase()).append("'/>\n");
             }
