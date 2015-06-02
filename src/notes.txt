@@ -11,7 +11,12 @@ http://www.bottlecaps.de/rr/ui
 
 manage difference of serial and sequence in various databases
 
-figure out the strategy for varchar and nvarchar
+implicit index in mysql for fk as compared to explicit indices in postgres and oracle
 
-implicit index in ms-sql server or mysql for fk as compared to explicit indices in postgres and oracle
+For varchars which expect to hold unicode chars, use the following directions.
+use nvarchar(L) where L <= 2000 (max limit for oracle). Here is L is the number of chars, not the number of bytes.
+Oracle by default uses utf-16 encoding for nvarchar so 4000 byte limit implies 2000 char limit.
+MSSQL Server uses UCS2 which is like UTF-16 for nvarchar.
+Postgres server should be configured with UTF-8 encoding. In such a case varchar behaves the same as nvarchar in other databases.
+MySQL 5.7 uses UTf-8 as default for nvarchar. so limit is one third of the 65K byte limit, which is much more than the oracle limit.
 
