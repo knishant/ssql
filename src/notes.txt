@@ -8,3 +8,14 @@ https://github.com/spring-projects/spring-batch/tree/master/spring-batch-core/sr
 
 railroad generator
 http://www.bottlecaps.de/rr/ui
+
+add check constraint for boolean in oracle
+
+IS_ACTIVE_ NUMBER(1,0) CHECK (IS_ACTIVE_ IN (1,0)),
+
+manage difference of serial and sequence in various databases
+
+figure out the strategy for varchar and nvarchar
+
+implicit index in ms-sql server or mysql for fk as compared to explicit indices in postgres and oracle
+
