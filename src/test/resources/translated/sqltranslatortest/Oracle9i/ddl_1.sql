@@ -23,7 +23,7 @@ CREATE TABLE ABC
     COL10                          FLOAT,
     COL11                          DOUBLE PRECISION          DEFAULT 2.3,
     COL12                          REAL,
-    COL13                          NUMBER(1,0)
+    COL13                          NUMBER(1,0)               CHECK (COL13 IN (1,0))
 );
 
 --pk comment

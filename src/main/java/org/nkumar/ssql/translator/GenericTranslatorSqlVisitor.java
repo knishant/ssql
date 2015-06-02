@@ -28,6 +28,7 @@ import org.nkumar.ssql.model.UniqueTableConstraint;
 import org.nkumar.ssql.model.Value;
 import org.nkumar.ssql.util.Util;
 
+import java.sql.Types;
 import java.util.Iterator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -381,7 +382,8 @@ public final class GenericTranslatorSqlVisitor implements TranslatorSqlVisitor
         appendComments(column.getComments(), paddingStr);
         buffer.append(paddingStr);
         int padding = paddingMode ? 30 : 0;
-        buffer.append(Util.padToSize(getQuotedIdentifier(column.getName()), padding)).append(" ");
+        String quotedColName = getQuotedIdentifier(column.getName());
+        buffer.append(Util.padToSize(quotedColName, padding)).append(" ");
         boolean typeSerialized;
         int bufferStartLength = buffer.length();
         appendPlaceHolder(column.getTypePlaceHolder());
@@ -433,6 +435,14 @@ public final class GenericTranslatorSqlVisitor implements TranslatorSqlVisitor
             {
                 buffer.append(" ").append(caseHandler.transform(nullColumnString));
             }
+        }
+        //CHECK (COL_NAME IN (1,0)), needed for oracle which does not support boolean
+        if (column.getType().getType() == Types.BOOLEAN && dialect.needsCheckConstraintForNumericBoolean())
+        {
+            buffer.append(" ").append(caseHandler.transform("check"))
+                    .append(" (").append(caseHandler.transform(quotedColName))
+                    .append(" ").append(caseHandler.transform("in"))
+                    .append(" (1,0))");
         }
         trimRight();
     }

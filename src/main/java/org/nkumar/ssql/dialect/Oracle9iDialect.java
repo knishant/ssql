@@ -68,4 +68,10 @@ public class Oracle9iDialect extends Dialect
     {
         return "nocache";
     }
+
+    @Override
+    public boolean needsCheckConstraintForNumericBoolean()
+    {
+        return true;
+    }
 }

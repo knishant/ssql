@@ -27,10 +27,10 @@ CREATE TABLE QRTZ_JOB_DETAILS
     JOB_GROUP                      VARCHAR2(200 CHAR)        NOT NULL,
     DESCRIPTION                    VARCHAR2(250 CHAR),
     JOB_CLASS_NAME                 VARCHAR2(250 CHAR)        NOT NULL,
-    IS_DURABLE                     NUMBER(1,0)               NOT NULL,
-    IS_NONCONCURRENT               NUMBER(1,0)               NOT NULL,
-    IS_UPDATE_DATA                 NUMBER(1,0)               NOT NULL,
-    REQUESTS_RECOVERY              NUMBER(1,0)               NOT NULL,
+    IS_DURABLE                     NUMBER(1,0)               NOT NULL CHECK (IS_DURABLE IN (1,0)),
+    IS_NONCONCURRENT               NUMBER(1,0)               NOT NULL CHECK (IS_NONCONCURRENT IN (1,0)),
+    IS_UPDATE_DATA                 NUMBER(1,0)               NOT NULL CHECK (IS_UPDATE_DATA IN (1,0)),
+    REQUESTS_RECOVERY              NUMBER(1,0)               NOT NULL CHECK (REQUESTS_RECOVERY IN (1,0)),
     JOB_DATA                       BLOB
 );
 
@@ -101,8 +101,8 @@ CREATE TABLE QRTZ_SIMPROP_TRIGGERS
     LONG_PROP_2                    NUMBER(19,0),
     DEC_PROP_1                     NUMBER(13,4),
     DEC_PROP_2                     NUMBER(13,4),
-    BOOL_PROP_1                    NUMBER(1,0),
-    BOOL_PROP_2                    NUMBER(1,0)
+    BOOL_PROP_1                    NUMBER(1,0)               CHECK (BOOL_PROP_1 IN (1,0)),
+    BOOL_PROP_2                    NUMBER(1,0)               CHECK (BOOL_PROP_2 IN (1,0))
 );
 
 ALTER TABLE QRTZ_SIMPROP_TRIGGERS ADD CONSTRAINT QRTZ_SIMPROP_TRIGGERS_PK PRIMARY KEY (SCHED_NAME, "TRIGGER_NAME", TRIGGER_GROUP);
@@ -151,8 +151,8 @@ CREATE TABLE QRTZ_FIRED_TRIGGERS
     "STATE"                        VARCHAR2(16 CHAR)         NOT NULL,
     JOB_NAME                       VARCHAR2(200 CHAR),
     JOB_GROUP                      VARCHAR2(200 CHAR),
-    IS_NONCONCURRENT               NUMBER(1,0),
-    REQUESTS_RECOVERY              NUMBER(1,0)
+    IS_NONCONCURRENT               NUMBER(1,0)               CHECK (IS_NONCONCURRENT IN (1,0)),
+    REQUESTS_RECOVERY              NUMBER(1,0)               CHECK (REQUESTS_RECOVERY IN (1,0))
 );
 
 ALTER TABLE QRTZ_FIRED_TRIGGERS ADD CONSTRAINT QRTZ_FIRED_TRIGGERS_PK PRIMARY KEY (SCHED_NAME, ENTRY_ID);

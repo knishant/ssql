@@ -248,4 +248,9 @@ public class Dialect
     {
         return false;
     }
+
+    public boolean needsCheckConstraintForNumericBoolean()
+    {
+        return false;
+    }
 }
