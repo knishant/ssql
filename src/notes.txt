@@ -16,6 +16,7 @@ implicit index in mysql for fk as compared to explicit indices in postgres and o
 For varchars which expect to hold unicode chars, use the following directions.
 use nvarchar(L) where L <= 2000 (max limit for oracle). Here is L is the number of chars, not the number of bytes.
 Oracle by default uses utf-16 encoding for nvarchar so 4000 byte limit implies 2000 char limit.
+Oracle uses UTF-8 by default for varchar so it can also be used to store unicode chars as long as length < 1333 (4000/3).
 MSSQL Server uses UCS2 which is like UTF-16 for nvarchar.
 Postgres server should be configured with UTF-8 encoding. In such a case varchar behaves the same as nvarchar in other databases.
 MySQL 5.7 uses UTf-8 as default for nvarchar. so limit is one third of the 65K byte limit, which is much more than the oracle limit.
