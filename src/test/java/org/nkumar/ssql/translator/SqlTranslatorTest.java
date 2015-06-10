@@ -71,6 +71,15 @@ public final class SqlTranslatorTest
     }
 
     @Test
+    public void translateActivitiDDL() throws Exception
+    {
+        assertCorrectTranslation("activiti.create.engine.sql", "Identity", "MySQL5InnoDB", "Oracle9i", "PostgreSQL9",
+                "SQLServer2005", "SQLServer2008");
+        assertCorrectTranslation("activiti.create.history.sql", "Identity", "MySQL5InnoDB", "Oracle9i", "PostgreSQL9",
+                "SQLServer2005", "SQLServer2008");
+    }
+
+    @Test
     public void translateQuartzDDL() throws Exception
     {
         assertCorrectTranslation("quartz.sql", "Identity", "MySQL5InnoDB", "Oracle9i", "PostgreSQL9", "SQLServer2005",
