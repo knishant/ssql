@@ -107,6 +107,7 @@ TOKEN:	/* Key words */
 |   <K_CACHE: "cache">
 |   <K_INCREMENT: "increment">
 |   <K_BY: "by">
+|   <K_IDENTITY: "identity">
 }
 
 TOKEN:  /* data types */
@@ -296,6 +297,7 @@ Column ColumnDefinition() :
 	t=<S_IDENTIFIER>                    {col = new Column(t.image); col.setComments(getComments(t));}
 	DataType(col)
     [t2=<PLACE_HOLDER>                  {col.setTypePlaceHolder(PlaceHolder.createPlaceHolder(t2.image));}]
+    [<K_IDENTITY>                       {col.setIdentity(true);}]
     /* order of default value and not null constraint seem to matter in ansi sql */
     [<K_DEFAULT> val = ConstantValue()       {col.setDefaultValue(val);} ]
 

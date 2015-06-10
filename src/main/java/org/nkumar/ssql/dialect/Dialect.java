@@ -204,6 +204,21 @@ public class Dialect
         return "no cache";
     }
 
+    public boolean supportsIdentityColumns()
+    {
+        return false;
+    }
+
+    public String getIdentityColumnString(int type)
+    {
+        throw new IllegalStateException("dialect does not support identity column");
+    }
+
+    public boolean hasDataTypeInIdentityColumn()
+    {
+        throw new IllegalStateException("dialect does not support identity column");
+    }
+
     public char openQuote()
     {
         return '"';

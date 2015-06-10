@@ -49,4 +49,24 @@ public class PostgreSQL9Dialect extends Dialect
     {
         return "";
     }
+
+    @Override
+    public boolean supportsIdentityColumns()
+    {
+        return true;
+    }
+
+    @Override
+    public boolean hasDataTypeInIdentityColumn()
+    {
+        return false;
+    }
+
+    @Override
+    public String getIdentityColumnString(int type) {
+        return type==Types.BIGINT ?
+                "bigserial not null" :
+                "serial not null";
+    }
+
 }

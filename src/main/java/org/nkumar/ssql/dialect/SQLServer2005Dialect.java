@@ -52,4 +52,22 @@ public class SQLServer2005Dialect extends Dialect
     {
         return "add";
     }
+
+    @Override
+    public boolean supportsIdentityColumns()
+    {
+        return true;
+    }
+
+    @Override
+    public boolean hasDataTypeInIdentityColumn()
+    {
+        return true;
+    }
+
+    @Override
+    public String getIdentityColumnString(int type)
+    {
+        return "identity";
+    }
 }

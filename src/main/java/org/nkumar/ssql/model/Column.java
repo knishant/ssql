@@ -11,6 +11,8 @@ public final class Column implements SqlVisitable
     private Value defaultValue;
     private boolean notNull;
 
+    private boolean identity;
+
     private Comment[] comments;
 
     private PlaceHolder typePlaceHolder;
@@ -43,6 +45,17 @@ public final class Column implements SqlVisitable
     public void setNotNull(boolean notNull)
     {
         this.notNull = notNull;
+    }
+
+    public boolean isIdentity()
+    {
+        return identity;
+    }
+
+    public void setIdentity(boolean identity)
+    {
+        //TODO does identity implies not null
+        this.identity = identity;
     }
 
     public Value getDefaultValue()

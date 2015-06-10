@@ -4,7 +4,7 @@ CreateTableStatement ::= 'CREATE' 'TABLE' Identifier '(' TableElement (',' Table
 
 TableElement ::= ( ColumnDefinition | TableConstraintDefinition )
 
-ColumnDefinition ::= Identifier DataType DefaultClause? ('NOT' 'NULL')?
+ColumnDefinition ::= Identifier DataType 'IDENTITY'? DefaultClause? ('NOT' 'NULL')?
 
 DataType ::= ( 'CHAR' ( '(' Length ')' )?)
             | ( 'VARCHAR'  '(' Length ')')

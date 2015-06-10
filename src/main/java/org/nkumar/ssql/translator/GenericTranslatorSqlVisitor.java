@@ -390,11 +390,24 @@ public final class GenericTranslatorSqlVisitor implements TranslatorSqlVisitor
         typeSerialized = buffer.length() > bufferStartLength;
         if (!typeSerialized)
         {
+            if (column.isIdentity() && dialect.supportsIdentityColumns() && !dialect.hasDataTypeInIdentityColumn())
+            {
+                //this is a hack, type is not serialized and does need to be serialized
+                typeSerialized = true;
+            }
+        }
+        if (!typeSerialized)
+        {
             column.getType().accept(this);
         }
         if (paddingMode)
         {
             buffer.append(Util.padToSize("", 25 - (buffer.length() - bufferStartLength)));
+        }
+        if (column.isIdentity() && dialect.supportsIdentityColumns())
+        {
+            String identityColumnString = dialect.getIdentityColumnString(column.getType().getType());
+            buffer.append(caseHandler.transform(identityColumnString)).append(' ');
         }
         Value defaultValue = column.getDefaultValue();
         if (defaultValue != null)

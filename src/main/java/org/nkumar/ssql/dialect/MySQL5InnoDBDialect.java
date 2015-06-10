@@ -72,4 +72,22 @@ public class MySQL5InnoDBDialect extends Dialect
     {
         return false;
     }
+
+    @Override
+    public boolean supportsIdentityColumns()
+    {
+        return true;
+    }
+
+    @Override
+    public boolean hasDataTypeInIdentityColumn()
+    {
+        return true;
+    }
+
+    @Override
+    public String getIdentityColumnString(int type)
+    {
+        return "auto_increment";
+    }
 }
