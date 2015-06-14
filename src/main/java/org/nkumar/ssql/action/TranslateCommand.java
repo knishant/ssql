@@ -64,15 +64,38 @@ public final class TranslateCommand
         {
             throw new IllegalArgumentException(srcDir.getAbsolutePath() + " is not a directory");
         }
-        File[] files = srcDir.listFiles();
+        List<String> sqlFilePaths = new ArrayList<>();
+        gatherSqlFiles(srcDir, sqlFilePaths);
+        for (String sqlFilePath : sqlFilePaths)
+        {
+            SqlTranslator.translateSqlFileToMultipleTranslators(srcDir, destDir, sqlFilePath, false, dialectClassNames);
+        }
+    }
+
+    private static void gatherSqlFiles(File dir, List<String> sqlFiles)
+    {
+        gatherSqlFilesRecursive(dir, "", sqlFiles);
+    }
+
+    private static void gatherSqlFilesRecursive(File dir, String pathPrefix, List<String> sqlFiles)
+    {
+        if (!dir.isDirectory())
+        {
+            return;
+        }
+        File[] files = dir.listFiles();
         if (files != null)
         {
             for (File file : files)
             {
-                if (file.getName().toLowerCase().endsWith(".sql"))
+                if (file.isDirectory())
                 {
-                    SqlTranslator.translateSqlFileToMultipleTranslators(file.getParentFile(), destDir, file.getName(),
-                            true, dialectClassNames);
+                    String subDirPathPrefix = pathPrefix + (pathPrefix.isEmpty() ? "" : "/") + file.getName();
+                    gatherSqlFilesRecursive(file, subDirPathPrefix, sqlFiles);
+                }
+                if (file.isFile() && file.getName().toLowerCase().endsWith(".sql"))
+                {
+                    sqlFiles.add(pathPrefix + file.getName());
                 }
             }
         }
