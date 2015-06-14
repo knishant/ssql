@@ -50,6 +50,11 @@ sourceSets {
     }
 }
 
+task translate(dependsOn:'assemble', type:JavaExec) {
+    main = 'org.nkumar.ssql.action.Main'
+    classpath = sourceSets.main.output
+    args = ['src/main/resources/sample.ssql.translate.properties']
+}
 
 
 

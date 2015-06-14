@@ -5,6 +5,7 @@ import org.nkumar.ssql.translator.SqlTranslator;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -17,7 +18,7 @@ public final class TranslateCommand
     private final List<String> dialects = new ArrayList<>();
     private final Map<String, String> customDialectMappings = new HashMap<>();
 
-    public void setSrcDir(File srcDir)
+    public TranslateCommand setSrcDir(File srcDir)
     {
         try
         {
@@ -27,9 +28,10 @@ public final class TranslateCommand
         {
             throw new RuntimeException(e);
         }
+        return this;
     }
 
-    public void setDestDir(File destDir)
+    public TranslateCommand setDestDir(File destDir)
     {
         try
         {
@@ -39,16 +41,19 @@ public final class TranslateCommand
         {
             throw new RuntimeException(e);
         }
+        return this;
     }
 
-    public void addDialect(String dialect)
+    public TranslateCommand addDialects(String... dialectNames)
     {
-        dialects.add(dialect);
+        Collections.addAll(dialects, dialectNames);
+        return this;
     }
 
-    public void addCustomDialectMapping(String dialectName, String dialectClassName)
+    public TranslateCommand addCustomDialectMapping(String dialectName, String dialectClassName)
     {
         customDialectMappings.put(dialectName, dialectClassName);
+        return this;
     }
 
     public void execute() throws Exception
