@@ -60,7 +60,22 @@ public final class TranslateCommand
         {
             dialectClassNames[i] = getDialectClassName(dialects.get(i));
         }
-        SqlTranslator.translateSqlDirToMultipleTranslators(srcDir, destDir,dialectClassNames);
+        if (!srcDir.isDirectory())
+        {
+            throw new IllegalArgumentException(srcDir.getAbsolutePath() + " is not a directory");
+        }
+        File[] files = srcDir.listFiles();
+        if (files != null)
+        {
+            for (File file : files)
+            {
+                if (file.getName().toLowerCase().endsWith(".sql"))
+                {
+                    SqlTranslator.translateSqlFileToMultipleTranslators(file.getParentFile(), destDir, file.getName(),
+                            true, dialectClassNames);
+                }
+            }
+        }
     }
 
     private String getDialectClassName(String dialectName)

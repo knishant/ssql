@@ -88,9 +88,10 @@ public final class SqlTranslatorTest
 
     private static void assertCorrectTranslation(String sqlFileName, String... dbnames) throws Exception
     {
-        File srcFile = new File(BASE_RSRC_DIR, "sqltranslatortest/" + sqlFileName);
+        File srcDir = new File(BASE_RSRC_DIR, "sqltranslatortest");
         String[] translatorNames = getDialectClassNames(dbnames);
-        SqlTranslator.translateSqlFileToMultipleTranslators(srcFile, BASE_TRANS_DIR, translatorNames);
+        SqlTranslator.translateSqlFileToMultipleTranslators(srcDir, BASE_TRANS_DIR, sqlFileName,
+                true, translatorNames);
         for (String dbname : dbnames)
         {
             File expectedDir = new File(BASE_EXP_DIR, dbname);
